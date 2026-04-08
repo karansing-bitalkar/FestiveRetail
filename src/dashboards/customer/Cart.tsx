@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiPlus, FiMinus, FiTrash2, FiShoppingCart } from 'react-icons/fi';
-import { MdLocalOffer } from 'react-icons/md';
+import { Plus, Minus, Trash2, ShoppingCart, Tag } from 'lucide-react';
 import { PRODUCTS, COMBO_PRODUCTS } from '@/constants/data';
 import ConfirmModal from '@/components/features/ConfirmModal';
 import { toast } from 'sonner';
@@ -46,7 +45,7 @@ export default function Cart() {
 
       {cart.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-200">
-          <FiShoppingCart className="text-5xl text-gray-300 mx-auto mb-4" />
+          <ShoppingCart size={40} className="text-gray-300 mx-auto mb-4" />
           <h3 className="font-bold text-gray-700 mb-2">Your cart is empty</h3>
           <p className="text-gray-400 text-sm">Add festive products to get started!</p>
         </div>
@@ -65,13 +64,13 @@ export default function Cart() {
                   <h4 className="font-semibold text-gray-900 text-sm line-clamp-1 mb-1">{item.product.name}</h4>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 border border-gray-200 rounded-xl overflow-hidden">
-                      <button onClick={() => updateQty(item.product.id, -1)} className="p-1.5 hover:bg-orange-50 transition-all"><FiMinus className="text-xs text-gray-600" /></button>
+                      <button onClick={() => updateQty(item.product.id, -1)} className="p-1.5 hover:bg-orange-50 transition-all"><Minus size={12} className="text-gray-600" /></button>
                       <span className="text-sm font-bold text-gray-900 w-6 text-center">{item.qty}</span>
-                      <button onClick={() => updateQty(item.product.id, 1)} className="p-1.5 hover:bg-orange-50 transition-all"><FiPlus className="text-xs text-gray-600" /></button>
+                      <button onClick={() => updateQty(item.product.id, 1)} className="p-1.5 hover:bg-orange-50 transition-all"><Plus size={12} className="text-gray-600" /></button>
                     </div>
                     <span className="font-black text-orange-500">₹{(item.product.price * item.qty).toLocaleString()}</span>
                     <button onClick={() => setRemoveItem(item.product.id)} className="w-8 h-8 bg-red-50 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-100 transition-all">
-                      <FiTrash2 className="text-sm" />
+                      <Trash2 size={14} />
                     </button>
                   </div>
                 </div>
@@ -83,7 +82,7 @@ export default function Cart() {
           <div className="flex flex-col gap-4">
             {/* Coupon */}
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-              <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2"><MdLocalOffer className="text-orange-500" /> Apply Coupon</h4>
+              <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2"><Tag size={16} className="text-orange-500" /> Apply Coupon</h4>
               <div className="flex gap-2">
                 <input value={coupon} onChange={e => setCoupon(e.target.value)} placeholder="Enter coupon code" disabled={couponApplied}
                   className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-orange-400 disabled:bg-gray-50" />

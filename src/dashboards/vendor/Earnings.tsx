@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiArrowUp, FiDollarSign } from 'react-icons/fi';
-import { MdAttachMoney, MdPending, MdCheckCircle } from 'react-icons/md';
+import { TrendingUp, DollarSign, Clock, CheckCircle } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const EARNINGS_DATA = [
@@ -20,25 +19,27 @@ export default function Earnings() {
   const pending = TRANSACTIONS.filter(t => t.status === 'pending').reduce((s, t) => s + t.net, 0);
   const paid = TRANSACTIONS.filter(t => t.status === 'paid').reduce((s, t) => s + t.net, 0);
 
+  const stats = [
+    { label: 'Total Earnings (YTD)', value: `₹${totalEarnings.toLocaleString()}`, icon: DollarSign, color: 'from-orange-400 to-red-400', change: '+18% vs last month' },
+    { label: 'Pending Payout', value: `₹${pending.toLocaleString()}`, icon: Clock, color: 'from-yellow-400 to-orange-400', change: 'Next payout: Mon' },
+    { label: 'Total Paid Out', value: `₹${paid.toLocaleString()}`, icon: CheckCircle, color: 'from-green-400 to-teal-400', change: 'Last: Oct 25, 2024' },
+  ];
+
   return (
     <div className="flex flex-col gap-6">
       <div><h2 className="text-2xl font-black text-gray-900 mb-1">Earnings & Payouts</h2><p className="text-gray-500 text-sm">Track your revenue and payouts</p></div>
 
       {/* Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { label: 'Total Earnings (YTD)', value: `₹${totalEarnings.toLocaleString()}`, icon: MdAttachMoney, color: 'from-orange-400 to-red-400', change: '+18% vs last month' },
-          { label: 'Pending Payout', value: `₹${pending.toLocaleString()}`, icon: MdPending, color: 'from-yellow-400 to-orange-400', change: 'Next payout: Mon' },
-          { label: 'Total Paid Out', value: `₹${paid.toLocaleString()}`, icon: MdCheckCircle, color: 'from-green-400 to-teal-400', change: 'Last: Oct 25, 2024' },
-        ].map((s, i) => {
+        {stats.map((s, i) => {
           const Icon = s.icon;
           return (
             <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
               className={`bg-gradient-to-br ${s.color} rounded-2xl p-5 text-white`}>
-              <Icon className="text-3xl opacity-80 mb-3" />
+              <Icon size={28} className="opacity-80 mb-3" />
               <div className="text-3xl font-black mb-0.5">{s.value}</div>
               <div className="text-white/80 text-sm font-medium mb-1">{s.label}</div>
-              <div className="flex items-center gap-1 text-white/60 text-xs"><FiArrowUp /><span>{s.change}</span></div>
+              <div className="flex items-center gap-1 text-white/60 text-xs"><TrendingUp size={10} /><span>{s.change}</span></div>
             </motion.div>
           );
         })}

@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FiArrowRight } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
 const CATEGORY_DATA = [
   { name: 'Diwali', icon: '🪔', count: 245, desc: 'Diyas, rangoli, gifts, sweets & more', color: 'from-orange-400 to-yellow-400', image: 'https://images.unsplash.com/photo-1605197584847-12af0e3c0f15?w=600&q=80' },
@@ -26,7 +25,7 @@ export default function Categories() {
         <div className="absolute inset-0 opacity-10">{[...Array(5)].map((_, i) => <div key={i} className="absolute w-80 h-80 rounded-full border border-white" style={{ left: `${i*25}%`, top: '-30%' }} />)}</div>
         <div className="relative max-w-4xl mx-auto px-4 text-center text-white">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium mb-5"><HiSparkles /> All Categories</div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium mb-5"><Sparkles size={14} /> All Categories</div>
             <h1 className="text-5xl font-black mb-4">Shop by Category</h1>
             <p className="text-xl text-white/80">Browse our curated collections for every festival and occasion</p>
           </motion.div>
@@ -51,7 +50,7 @@ export default function Categories() {
                 <div className="bg-white p-4 border-t-0">
                   <p className="text-gray-600 text-sm">{cat.desc}</p>
                   <div className="flex items-center gap-1 text-orange-500 text-sm font-semibold mt-2 group-hover:gap-2 transition-all">
-                    Shop Now <FiArrowRight />
+                    Shop Now <ArrowRight size={14} />
                   </div>
                 </div>
               </Link>
@@ -122,7 +121,7 @@ export default function Categories() {
             <h2 className="text-3xl font-black mb-3">Find Your Perfect Festive Gift</h2>
             <p className="text-white/80 mb-6">Browse thousands of curated festive products across all categories</p>
             <Link to="/shop" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-orange-500 rounded-2xl font-bold shadow-lg hover:bg-orange-50 transition-all">
-              Explore All Products <FiArrowRight />
+              Explore All Products <ArrowRight size={16} />
             </Link>
           </motion.div>
         </div>
@@ -149,7 +148,7 @@ export default function Categories() {
               <div className={`${item.color} p-5`}>
                 <h3 className="font-bold text-gray-900 mb-1">{item.title}</h3>
                 <p className="text-gray-600 text-sm mb-3">{item.desc}</p>
-                <Link to="/shop" className="text-orange-500 font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">Shop Now <FiArrowRight /></Link>
+                <Link to="/shop" className="text-orange-500 font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">Shop Now <ArrowRight size={13} /></Link>
               </div>
             </motion.div>
           ))}

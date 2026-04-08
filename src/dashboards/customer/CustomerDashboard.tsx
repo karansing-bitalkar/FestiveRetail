@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MdShoppingBag, MdFavorite, MdShoppingCart, MdLocalShipping, MdStar } from 'react-icons/md';
-import { FiArrowRight } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi';
+import { ShoppingBag, Heart, ShoppingCart, Truck, Star, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { ORDERS, PRODUCTS } from '@/constants/data';
 
@@ -18,10 +16,10 @@ export default function CustomerDashboard() {
   const { user } = useAuth();
   const myOrders = ORDERS.filter(o => o.customerId === 'c1');
   const stats = [
-    { label: 'Total Orders', value: myOrders.length, icon: MdShoppingBag, color: 'from-orange-400 to-red-400', link: '/dashboard/customer/orders' },
-    { label: 'Wishlist Items', value: 5, icon: MdFavorite, color: 'from-pink-400 to-rose-400', link: '/dashboard/customer/wishlist' },
-    { label: 'Cart Items', value: 3, icon: MdShoppingCart, color: 'from-purple-400 to-blue-400', link: '/dashboard/customer/cart' },
-    { label: 'Delivered', value: myOrders.filter(o => o.status === 'delivered').length, icon: MdLocalShipping, color: 'from-green-400 to-teal-400', link: '/dashboard/customer/orders' },
+    { label: 'Total Orders', value: myOrders.length, icon: ShoppingBag, color: 'from-orange-400 to-red-400', link: '/dashboard/customer/orders' },
+    { label: 'Wishlist Items', value: 5, icon: Heart, color: 'from-pink-400 to-rose-400', link: '/dashboard/customer/wishlist' },
+    { label: 'Cart Items', value: 3, icon: ShoppingCart, color: 'from-purple-400 to-blue-400', link: '/dashboard/customer/cart' },
+    { label: 'Delivered', value: myOrders.filter(o => o.status === 'delivered').length, icon: Truck, color: 'from-green-400 to-teal-400', link: '/dashboard/customer/orders' },
   ];
 
   return (
@@ -30,11 +28,11 @@ export default function CustomerDashboard() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="fest-gradient rounded-3xl p-7 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">{[...Array(4)].map((_, i) => <div key={i} className="absolute w-40 h-40 rounded-full border border-white" style={{ right: `${i*15}%`, top: '-30%' }} />)}</div>
         <div className="relative">
-          <div className="flex items-center gap-2 text-white/80 text-sm mb-2"><HiSparkles /> Festive Season is here!</div>
-          <h2 className="text-2xl font-black mb-1">Hello, {user?.name?.split(' ')[0]}! 🎉</h2>
+          <div className="flex items-center gap-2 text-white/80 text-sm mb-2"><Sparkles size={14} /> Festive Season is here!</div>
+          <h2 className="text-2xl font-black mb-1">Hello, {user?.name?.split(' ')[0]}!</h2>
           <p className="text-white/80 mb-5">You have {myOrders.filter(o => o.status === 'shipped').length} order(s) on the way. Exclusive Diwali sale is live!</p>
           <Link to="/shop" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-orange-500 rounded-xl font-bold text-sm hover:bg-orange-50 transition-all">
-            Shop Now <FiArrowRight />
+            Shop Now <ArrowRight size={15} />
           </Link>
         </div>
       </motion.div>
@@ -46,7 +44,7 @@ export default function CustomerDashboard() {
           return (
             <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>
               <Link to={s.link} className={`block p-5 bg-gradient-to-br ${s.color} rounded-2xl text-white hover:opacity-90 transition-all shadow-sm hover:shadow-md`}>
-                <Icon className="text-3xl mb-3 opacity-80" />
+                <Icon size={28} className="mb-3 opacity-80" />
                 <div className="text-3xl font-black mb-0.5">{s.value}</div>
                 <div className="text-white/80 text-sm font-medium">{s.label}</div>
               </Link>
@@ -59,7 +57,7 @@ export default function CustomerDashboard() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-gray-900">Recent Orders</h3>
-          <Link to="/dashboard/customer/orders" className="text-orange-500 text-sm font-semibold hover:text-orange-600 flex items-center gap-1">View All <FiArrowRight /></Link>
+          <Link to="/dashboard/customer/orders" className="text-orange-500 text-sm font-semibold hover:text-orange-600 flex items-center gap-1">View All <ArrowRight size={14} /></Link>
         </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
@@ -93,7 +91,7 @@ export default function CustomerDashboard() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-gray-900">Recommended for You</h3>
-          <Link to="/shop" className="text-orange-500 text-sm font-semibold hover:text-orange-600 flex items-center gap-1">View All <FiArrowRight /></Link>
+          <Link to="/shop" className="text-orange-500 text-sm font-semibold hover:text-orange-600 flex items-center gap-1">View All <ArrowRight size={14} /></Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {PRODUCTS.slice(0, 4).map((p, i) => (
@@ -106,7 +104,7 @@ export default function CustomerDashboard() {
                 <h4 className="font-semibold text-gray-900 text-xs line-clamp-2 mb-1">{p.name}</h4>
                 <div className="flex items-center justify-between">
                   <span className="text-orange-500 font-bold text-sm">₹{p.price.toLocaleString()}</span>
-                  <div className="flex items-center gap-0.5"><MdStar className="text-yellow-400 text-xs" /><span className="text-xs text-gray-500">{p.rating}</span></div>
+                  <div className="flex items-center gap-0.5"><Star size={10} className="text-yellow-400 fill-yellow-400" /><span className="text-xs text-gray-500">{p.rating}</span></div>
                 </div>
               </div>
             </motion.div>

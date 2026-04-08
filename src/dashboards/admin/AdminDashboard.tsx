@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MdPeople, MdStore, MdShoppingBag, MdAttachMoney, MdVerifiedUser, MdBlock } from 'react-icons/md';
-import { FiArrowRight, FiArrowUp, FiTrendingUp } from 'react-icons/fi';
+import { Users, Store, ShoppingBag, DollarSign, ArrowRight, TrendingUp, ArrowUp } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { ORDERS } from '@/constants/data';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis } from 'recharts';
@@ -17,10 +16,10 @@ const PIE_COLORS = ['#f97316', '#ec4899', '#8b5cf6', '#06b6d4'];
 export default function AdminDashboard() {
   const { user } = useAuth();
   const stats = [
-    { label: 'Total Users', value: '24,891', icon: MdPeople, color: 'from-blue-400 to-cyan-400', link: '/dashboard/admin/users', change: '+124 today' },
-    { label: 'Active Vendors', value: '589', icon: MdStore, color: 'from-purple-400 to-pink-400', link: '/dashboard/admin/vendors', change: '+12 this week' },
-    { label: 'Total Orders', value: '1,24,567', icon: MdShoppingBag, color: 'from-orange-400 to-red-400', link: '/dashboard/admin/orders', change: '+843 today' },
-    { label: 'Revenue (MTD)', value: '₹32L', icon: MdAttachMoney, color: 'from-green-400 to-teal-400', link: '/dashboard/admin/analytics', change: '+23% vs last month' },
+    { label: 'Total Users', value: '24,891', icon: Users, color: 'from-blue-400 to-cyan-400', link: '/dashboard/admin/users', change: '+124 today' },
+    { label: 'Active Vendors', value: '589', icon: Store, color: 'from-purple-400 to-pink-400', link: '/dashboard/admin/vendors', change: '+12 this week' },
+    { label: 'Total Orders', value: '1,24,567', icon: ShoppingBag, color: 'from-orange-400 to-red-400', link: '/dashboard/admin/orders', change: '+843 today' },
+    { label: 'Revenue (MTD)', value: '₹32L', icon: DollarSign, color: 'from-green-400 to-teal-400', link: '/dashboard/admin/analytics', change: '+23% vs last month' },
   ];
 
   return (
@@ -32,7 +31,7 @@ export default function AdminDashboard() {
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="text-white/80 text-sm mb-1">Admin Control Panel</div>
-            <h2 className="text-2xl font-black mb-1">Good day, {user?.name}! 👑</h2>
+            <h2 className="text-2xl font-black mb-1">Good day, {user?.name}!</h2>
             <p className="text-white/80">Platform is running smoothly. 3 vendor approvals pending. Diwali traffic is 3x normal.</p>
           </div>
           <div className="flex gap-3">
@@ -50,10 +49,10 @@ export default function AdminDashboard() {
           return (
             <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>
               <Link to={s.link} className={`block p-5 bg-gradient-to-br ${s.color} rounded-2xl text-white hover:opacity-90 transition-all shadow-sm hover:shadow-md`}>
-                <Icon className="text-3xl mb-3 opacity-80" />
+                <Icon size={28} className="mb-3 opacity-80" />
                 <div className="text-3xl font-black mb-0.5">{s.value}</div>
                 <div className="text-white/80 text-sm font-medium mb-1">{s.label}</div>
-                <div className="text-white/60 text-xs flex items-center gap-1"><FiArrowUp className="text-[10px]" />{s.change}</div>
+                <div className="text-white/60 text-xs flex items-center gap-1"><ArrowUp size={10} />{s.change}</div>
               </Link>
             </motion.div>
           );
@@ -104,7 +103,7 @@ export default function AdminDashboard() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-gray-900">Recent Platform Orders</h3>
-          <Link to="/dashboard/admin/orders" className="text-orange-500 text-sm font-semibold flex items-center gap-1">View All <FiArrowRight /></Link>
+          <Link to="/dashboard/admin/orders" className="text-orange-500 text-sm font-semibold flex items-center gap-1">View All <ArrowRight size={14} /></Link>
         </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <table className="w-full">

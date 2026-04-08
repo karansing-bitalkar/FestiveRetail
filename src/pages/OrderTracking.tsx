@@ -1,15 +1,13 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiPackage } from 'react-icons/fi';
-import { MdCheckCircle, MdLocalShipping, MdInventory, MdHome, MdStore } from 'react-icons/md';
-import { HiSparkles } from 'react-icons/hi';
+import { ArrowLeft, Package, CheckCircle, Layers, Truck, Home, Store, Sparkles } from 'lucide-react';
 
 const TRACK_STAGES = [
-  { id: 'placed', label: 'Order Placed', icon: FiPackage, desc: 'Your order has been received and confirmed', color: 'text-orange-500', bg: 'bg-orange-50' },
-  { id: 'confirmed', label: 'Confirmed', icon: MdCheckCircle, desc: 'Seller has confirmed your order', color: 'text-blue-500', bg: 'bg-blue-50' },
-  { id: 'packed', label: 'Packed', icon: MdInventory, desc: 'Your items are packed and ready', color: 'text-purple-500', bg: 'bg-purple-50' },
-  { id: 'shipped', label: 'Shipped', icon: MdLocalShipping, desc: 'On its way to you', color: 'text-pink-500', bg: 'bg-pink-50' },
-  { id: 'delivered', label: 'Delivered', icon: MdHome, desc: 'Order delivered successfully', color: 'text-green-500', bg: 'bg-green-50' },
+  { id: 'placed', label: 'Order Placed', icon: Package, desc: 'Your order has been received and confirmed', color: 'text-orange-500', bg: 'bg-orange-50' },
+  { id: 'confirmed', label: 'Confirmed', icon: CheckCircle, desc: 'Seller has confirmed your order', color: 'text-blue-500', bg: 'bg-blue-50' },
+  { id: 'packed', label: 'Packed', icon: Layers, desc: 'Your items are packed and ready', color: 'text-purple-500', bg: 'bg-purple-50' },
+  { id: 'shipped', label: 'Shipped', icon: Truck, desc: 'On its way to you', color: 'text-pink-500', bg: 'bg-pink-50' },
+  { id: 'delivered', label: 'Delivered', icon: Home, desc: 'Order delivered successfully', color: 'text-green-500', bg: 'bg-green-50' },
 ];
 
 const DELIVERY_UPDATES = [
@@ -23,7 +21,7 @@ const DELIVERY_UPDATES = [
 
 export default function OrderTracking() {
   const { orderId } = useParams<{ orderId: string }>();
-  const currentStage = 'shipped'; // mock current stage
+  const currentStage = 'shipped';
   const currentIdx = TRACK_STAGES.findIndex((s) => s.id === currentStage);
 
   return (
@@ -31,7 +29,7 @@ export default function OrderTracking() {
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <Link to="/home" className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-600 shadow-sm hover:text-orange-500 transition-colors border border-gray-100">
-          <FiArrowLeft />
+          <ArrowLeft size={18} />
         </Link>
         <div>
           <h1 className="text-2xl font-black text-gray-900">Track Order</h1>
@@ -52,15 +50,13 @@ export default function OrderTracking() {
             {/* Vertical timeline */}
             <div className="relative">
               <div className="absolute left-5 top-0 bottom-0 w-0.5 bg-gray-100" />
-              <div
-                className="absolute left-5 top-0 w-0.5 fest-gradient transition-all duration-1000"
-                style={{ height: `${(currentIdx / (TRACK_STAGES.length - 1)) * 100}%` }}
-              />
+              <div className="absolute left-5 top-0 w-0.5 fest-gradient transition-all duration-1000"
+                style={{ height: `${(currentIdx / (TRACK_STAGES.length - 1)) * 100}%` }} />
               <div className="flex flex-col gap-6">
                 {TRACK_STAGES.map((stage, i) => {
                   const isDone = i <= currentIdx;
                   const isCurrent = i === currentIdx;
-                  const StageIcon = stage.icon as any;
+                  const StageIcon = stage.icon;
                   return (
                     <motion.div key={stage.id}
                       initial={{ opacity: 0, x: -16 }}
@@ -69,7 +65,7 @@ export default function OrderTracking() {
                       className="flex items-start gap-4 pl-1"
                     >
                       <div className={`relative z-10 w-9 h-9 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all ${isDone ? (isCurrent ? 'fest-gradient shadow-md scale-110' : 'bg-green-500') : 'bg-white border-2 border-gray-200'}`}>
-                        <StageIcon className={`text-lg ${isDone ? 'text-white' : 'text-gray-300'}`} />
+                        <StageIcon size={16} className={isDone ? 'text-white' : 'text-gray-300'} />
                         {isCurrent && (
                           <motion.div animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }} transition={{ repeat: Infinity, duration: 1.5 }}
                             className="absolute inset-0 rounded-2xl fest-gradient" />
@@ -79,7 +75,7 @@ export default function OrderTracking() {
                         <div className="flex items-center justify-between">
                           <span className={`font-bold text-sm ${isDone ? 'text-gray-900' : 'text-gray-400'}`}>{stage.label}</span>
                           {isCurrent && <span className="text-xs text-orange-500 font-bold bg-orange-50 px-2 py-0.5 rounded-full">Current</span>}
-                          {isDone && !isCurrent && <MdCheckCircle className="text-green-500 text-lg" />}
+                          {isDone && !isCurrent && <CheckCircle size={16} className="text-green-500" />}
                         </div>
                         <p className={`text-xs mt-0.5 ${isDone ? 'text-gray-500' : 'text-gray-300'}`}>{stage.desc}</p>
                         {i < TRACK_STAGES.length - 1 && !isDone && (
@@ -108,7 +104,7 @@ export default function OrderTracking() {
                     <p className="text-sm font-semibold text-gray-900">{u.message}</p>
                     <div className="flex items-center gap-3 mt-0.5">
                       <span className="text-xs text-gray-400">{u.time} · {u.date}</span>
-                      <span className="text-xs text-gray-500 flex items-center gap-1"><MdStore className="text-gray-400" />{u.location}</span>
+                      <span className="text-xs text-gray-500 flex items-center gap-1"><Store size={10} className="text-gray-400" />{u.location}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -120,24 +116,12 @@ export default function OrderTracking() {
         {/* Right: Order info */}
         <div className="flex flex-col gap-5">
           <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
-            <h3 className="font-black text-gray-900 mb-4 flex items-center gap-2"><HiSparkles className="text-orange-400" /> Order Info</h3>
+            <h3 className="font-black text-gray-900 mb-4 flex items-center gap-2"><Sparkles size={16} className="text-orange-400" /> Order Info</h3>
             <div className="flex flex-col gap-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Order ID</span>
-                <span className="font-bold text-orange-500">#{orderId}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Ordered</span>
-                <span className="font-medium text-gray-900">Oct 31, 2024</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Est. Delivery</span>
-                <span className="font-bold text-green-600">Nov 3, 2024</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Total</span>
-                <span className="font-black text-gray-900">₹3,697</span>
-              </div>
+              <div className="flex justify-between text-sm"><span className="text-gray-500">Order ID</span><span className="font-bold text-orange-500">#{orderId}</span></div>
+              <div className="flex justify-between text-sm"><span className="text-gray-500">Ordered</span><span className="font-medium text-gray-900">Oct 31, 2024</span></div>
+              <div className="flex justify-between text-sm"><span className="text-gray-500">Est. Delivery</span><span className="font-bold text-green-600">Nov 3, 2024</span></div>
+              <div className="flex justify-between text-sm"><span className="text-gray-500">Total</span><span className="font-black text-gray-900">₹3,697</span></div>
             </div>
           </div>
 

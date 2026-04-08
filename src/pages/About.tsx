@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiHeart } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi';
-import { MdVerified, MdEco, MdStar } from 'react-icons/md';
+import { ArrowRight, Heart, Sparkles, BadgeCheck, Leaf, Star } from 'lucide-react';
 
 const TEAM = [
   { name: 'Arjun Mehta', role: 'Founder & CEO', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80', desc: 'Visionary entrepreneur with 10+ years in e-commerce' },
@@ -12,10 +10,10 @@ const TEAM = [
 ];
 
 const VALUES = [
-  { icon: FiHeart, title: 'Customer First', desc: 'Every decision we make starts with "how does this help our customers celebrate better?"', color: 'bg-red-100 text-red-500' },
-  { icon: MdVerified, title: 'Authenticity', desc: 'We verify every product and vendor to ensure you receive only genuine, quality items.', color: 'bg-blue-100 text-blue-500' },
-  { icon: MdEco, title: 'Sustainability', desc: 'We prioritize eco-friendly products and sustainable packaging for a greener future.', color: 'bg-green-100 text-green-500' },
-  { icon: MdStar, title: 'Excellence', desc: 'From product quality to customer service, we strive for excellence in everything.', color: 'bg-yellow-100 text-yellow-500' },
+  { icon: Heart, title: 'Customer First', desc: 'Every decision we make starts with "how does this help our customers celebrate better?"', color: 'bg-red-100 text-red-500' },
+  { icon: BadgeCheck, title: 'Authenticity', desc: 'We verify every product and vendor to ensure you receive only genuine, quality items.', color: 'bg-blue-100 text-blue-500' },
+  { icon: Leaf, title: 'Sustainability', desc: 'We prioritize eco-friendly products and sustainable packaging for a greener future.', color: 'bg-green-100 text-green-500' },
+  { icon: Star, title: 'Excellence', desc: 'From product quality to customer service, we strive for excellence in everything.', color: 'bg-yellow-100 text-yellow-500' },
 ];
 
 const MILESTONES = [
@@ -35,7 +33,7 @@ export default function About() {
         <div className="absolute inset-0 opacity-10">{[...Array(5)].map((_, i) => <div key={i} className="absolute w-80 h-80 rounded-full border border-white" style={{ right: `${i*20}%`, top: '-30%' }} />)}</div>
         <div className="relative max-w-4xl mx-auto px-4 text-center text-white">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium mb-5"><HiSparkles /> Our Story</div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium mb-5"><Sparkles size={14} /> Our Story</div>
             <h1 className="text-5xl font-black mb-4">Celebrating India's Festivals<br />One Order at a Time</h1>
             <p className="text-xl text-white/80 max-w-2xl mx-auto">Born from the love of festivals, FestiveRetail is India's most trusted festive shopping platform, connecting buyers with the finest festive products from across the country.</p>
           </motion.div>
@@ -55,7 +53,7 @@ export default function About() {
               Our platform bridges the gap between talented local artisans, vendors, and millions of customers who seek authentic, quality festive products. We're not just a marketplace — we're a celebration partner.
             </p>
             <Link to="/shop" className="inline-flex items-center gap-2 px-6 py-3 fest-gradient text-white rounded-xl font-semibold hover:opacity-90 transition-all">
-              Start Shopping <FiArrowRight />
+              Start Shopping <ArrowRight size={16} />
             </Link>
           </motion.div>
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}>
@@ -88,7 +86,7 @@ export default function About() {
               <motion.div key={v.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow text-center">
                 <div className={`w-14 h-14 ${v.color} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
-                  <v.icon className="text-2xl" />
+                  <v.icon size={24} />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">{v.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{v.desc}</p>

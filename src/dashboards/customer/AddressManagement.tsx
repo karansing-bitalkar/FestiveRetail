@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiPlus, FiEdit2, FiTrash2, FiMapPin, FiCheck } from 'react-icons/fi';
+import { Plus, Edit2, Trash2, MapPin, Check } from 'lucide-react';
 import { ADDRESSES } from '@/constants/data';
 import { Address } from '@/types';
 import Modal from '@/components/features/Modal';
@@ -44,7 +44,7 @@ export default function AddressManagement() {
       <div className="flex items-center justify-between">
         <div><h2 className="text-2xl font-black text-gray-900 mb-1">Address Management</h2><p className="text-gray-500 text-sm">{addresses.length}/10 addresses saved</p></div>
         <button onClick={openAdd} className="flex items-center gap-2 px-5 py-2.5 fest-gradient text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all">
-          <FiPlus /> Add Address
+          <Plus size={15} /> Add Address
         </button>
       </div>
 
@@ -55,15 +55,15 @@ export default function AddressManagement() {
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
                 <div className={`px-3 py-1 rounded-lg text-xs font-bold ${addr.isDefault ? 'fest-gradient text-white' : 'bg-gray-100 text-gray-600'}`}>{addr.label}</div>
-                {addr.isDefault && <span className="flex items-center gap-1 text-xs text-orange-500 font-semibold"><FiCheck /> Default</span>}
+                {addr.isDefault && <span className="flex items-center gap-1 text-xs text-orange-500 font-semibold"><Check size={12} /> Default</span>}
               </div>
               <div className="flex gap-2">
-                <button onClick={() => openEdit(addr)} className="w-8 h-8 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center hover:bg-blue-100 transition-all"><FiEdit2 className="text-sm" /></button>
-                <button onClick={() => setDeleteAddr(addr.id)} className="w-8 h-8 bg-red-50 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-100 transition-all"><FiTrash2 className="text-sm" /></button>
+                <button onClick={() => openEdit(addr)} className="w-8 h-8 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center hover:bg-blue-100 transition-all"><Edit2 size={13} /></button>
+                <button onClick={() => setDeleteAddr(addr.id)} className="w-8 h-8 bg-red-50 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-100 transition-all"><Trash2 size={13} /></button>
               </div>
             </div>
             <div className="flex items-start gap-2 text-gray-700 text-sm mb-3">
-              <FiMapPin className="text-orange-400 mt-0.5 flex-shrink-0" />
+              <MapPin size={14} className="text-orange-400 mt-0.5 flex-shrink-0" />
               <span>{addr.street}, {addr.city}, {addr.state} - {addr.pincode}</span>
             </div>
             {!addr.isDefault && (

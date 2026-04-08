@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FiMail, FiPhone, FiMapPin, FiInstagram, FiFacebook, FiTwitter, FiYoutube } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi';
-import { BsWhatsapp } from 'react-icons/bs';
+import { Mail, Phone, MapPin, Instagram, Facebook, Twitter, Youtube, Sparkles, MessageCircle } from 'lucide-react';
 
 const FOOTER_LINKS = {
   'Quick Links': [
@@ -57,7 +55,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-9 h-9 fest-gradient rounded-xl flex items-center justify-center">
-                <HiSparkles className="text-white text-lg" />
+                <Sparkles size={16} className="text-white" />
               </div>
               <span className="font-bold text-xl text-white">FestiveRetail</span>
             </div>
@@ -66,25 +64,25 @@ export default function Footer() {
             </p>
             <div className="flex flex-col gap-2 text-sm">
               <div className="flex items-center gap-2">
-                <FiMail className="text-orange-400 flex-shrink-0" />
+                <Mail size={14} className="text-orange-400 flex-shrink-0" />
                 <span>support@festiveretail.com</span>
               </div>
               <div className="flex items-center gap-2">
-                <FiPhone className="text-orange-400 flex-shrink-0" />
+                <Phone size={14} className="text-orange-400 flex-shrink-0" />
                 <span>+91 1800 123 4567 (Toll Free)</span>
               </div>
               <div className="flex items-center gap-2">
-                <FiMapPin className="text-orange-400 flex-shrink-0" />
+                <MapPin size={14} className="text-orange-400 flex-shrink-0" />
                 <span>Pune, Maharashtra, India 411001</span>
               </div>
             </div>
             <div className="flex items-center gap-3 mt-5">
               {[
-                { icon: FiInstagram, color: 'hover:text-pink-400', label: 'Instagram' },
-                { icon: FiFacebook, color: 'hover:text-blue-400', label: 'Facebook' },
-                { icon: FiTwitter, color: 'hover:text-sky-400', label: 'Twitter' },
-                { icon: FiYoutube, color: 'hover:text-red-400', label: 'YouTube' },
-                { icon: BsWhatsapp, color: 'hover:text-green-400', label: 'WhatsApp' },
+                { icon: Instagram, color: 'hover:text-pink-400', label: 'Instagram' },
+                { icon: Facebook, color: 'hover:text-blue-400', label: 'Facebook' },
+                { icon: Twitter, color: 'hover:text-sky-400', label: 'Twitter' },
+                { icon: Youtube, color: 'hover:text-red-400', label: 'YouTube' },
+                { icon: MessageCircle, color: 'hover:text-green-400', label: 'WhatsApp' },
               ].map(({ icon: Icon, color, label }) => (
                 <a
                   key={label}
@@ -92,7 +90,7 @@ export default function Footer() {
                   aria-label={label}
                   className={`w-9 h-9 flex items-center justify-center rounded-xl bg-gray-800 text-gray-400 ${color} transition-all hover:scale-110`}
                 >
-                  <Icon />
+                  <Icon size={16} />
                 </a>
               ))}
             </div>
@@ -125,10 +123,10 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-gray-500 text-sm">© 2024 FestiveRetail. All rights reserved.</p>
           <div className="flex items-center gap-4 text-xs text-gray-500">
-            <span>🔒 Secure Payments</span>
-            <span>🚚 Free Delivery</span>
-            <span>↩️ Easy Returns</span>
-            <span>💳 GST Compliant</span>
+            <span>Secure Payments</span>
+            <span>Free Delivery</span>
+            <span>Easy Returns</span>
+            <span>GST Compliant</span>
           </div>
         </div>
       </div>

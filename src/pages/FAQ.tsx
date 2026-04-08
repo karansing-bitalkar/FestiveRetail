@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiPlus, FiMinus, FiSearch } from 'react-icons/fi';
+import { Plus, Minus, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FAQ_CATEGORIES = {
@@ -56,7 +56,7 @@ export default function FAQ() {
             <h1 className="text-4xl font-black mb-3">Frequently Asked Questions</h1>
             <p className="text-white/80 text-lg mb-6">Find answers to the most common questions about FestiveRetail</p>
             <div className="relative max-w-lg mx-auto">
-              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
               <input type="text" placeholder="Search questions..." value={search} onChange={e => setSearch(e.target.value)}
                 className="w-full pl-11 pr-4 py-3.5 bg-white/90 text-gray-800 placeholder-gray-400 rounded-xl focus:outline-none shadow-lg" />
             </div>
@@ -87,7 +87,7 @@ export default function FAQ() {
                   className="w-full flex items-center justify-between p-5 text-left hover:bg-orange-50 transition-colors">
                   <span className="font-semibold text-gray-900 text-sm pr-4">{item.q}</span>
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${openFaq === key ? 'fest-gradient text-white' : 'bg-gray-100 text-gray-600'}`}>
-                    {openFaq === key ? <FiMinus className="text-sm" /> : <FiPlus className="text-sm" />}
+                    {openFaq === key ? <Minus size={14} /> : <Plus size={14} />}
                   </div>
                 </button>
                 <AnimatePresence>

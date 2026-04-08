@@ -1,22 +1,21 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MdNotifications, MdSecurity, MdPayment, MdLanguage, MdEmail, MdSupportAgent } from 'react-icons/md';
-import { FiSave } from 'react-icons/fi';
+import { Bell, Shield, CreditCard, Globe, Mail, Headphones, Save } from 'lucide-react';
 import { toast } from 'sonner';
 
 const SETTING_SECTIONS = [
-  { icon: MdNotifications, label: 'Notifications', color: 'bg-orange-100 text-orange-500', settings: [
+  { icon: Bell, label: 'Notifications', color: 'bg-orange-100 text-orange-500', settings: [
     { label: 'Email notifications for new orders', type: 'toggle', key: 'emailOrders', default: true },
     { label: 'SMS alerts for critical issues', type: 'toggle', key: 'smsAlerts', default: true },
     { label: 'Weekly revenue report', type: 'toggle', key: 'weeklyReport', default: false },
     { label: 'Vendor approval requests', type: 'toggle', key: 'vendorApprovals', default: true },
   ]},
-  { icon: MdSecurity, label: 'Security', color: 'bg-red-100 text-red-500', settings: [
+  { icon: Shield, label: 'Security', color: 'bg-red-100 text-red-500', settings: [
     { label: 'Two-factor authentication', type: 'toggle', key: '2fa', default: false },
     { label: 'Login alerts on new devices', type: 'toggle', key: 'loginAlerts', default: true },
     { label: 'Session timeout (minutes)', type: 'select', key: 'sessionTimeout', default: '60', options: ['30', '60', '120', '240'] },
   ]},
-  { icon: MdPayment, label: 'Payment Settings', color: 'bg-green-100 text-green-500', settings: [
+  { icon: CreditCard, label: 'Payment Settings', color: 'bg-green-100 text-green-500', settings: [
     { label: 'Platform commission rate (%)', type: 'number', key: 'commission', default: '10' },
     { label: 'Minimum payout amount (₹)', type: 'number', key: 'minPayout', default: '500' },
     { label: 'Auto-payout enabled', type: 'toggle', key: 'autoPayout', default: true },
@@ -40,7 +39,7 @@ export default function Settings() {
 
       {/* General */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><MdLanguage className="text-blue-500" /> General Settings</h3>
+        <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><Globe size={16} className="text-blue-500" /> General Settings</h3>
         <div className="flex flex-col gap-4">
           <div><label className="block text-sm font-medium text-gray-700 mb-1">Platform Name</label>
             <input value={platformName} onChange={e => setPlatformName(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm" /></div>
@@ -58,7 +57,7 @@ export default function Settings() {
       {/* Dynamic sections */}
       {SETTING_SECTIONS.map((section, si) => (
         <motion.div key={section.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: (si + 1) * 0.1 }} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><div className={`w-7 h-7 ${section.color} rounded-lg flex items-center justify-center`}><section.icon className="text-sm" /></div>{section.label}</h3>
+          <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><div className={`w-7 h-7 ${section.color} rounded-lg flex items-center justify-center`}><section.icon size={15} /></div>{section.label}</h3>
           <div className="flex flex-col gap-4">
             {section.settings.map(setting => (
               <div key={setting.key} className="flex items-center justify-between">
@@ -86,7 +85,7 @@ export default function Settings() {
       ))}
 
       <button onClick={handleSave} className="flex items-center justify-center gap-2 w-full py-4 fest-gradient text-white rounded-2xl font-bold hover:opacity-90 transition-all">
-        <FiSave /> Save All Settings
+        <Save size={16} /> Save All Settings
       </button>
     </div>
   );

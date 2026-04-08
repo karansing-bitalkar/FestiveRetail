@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiAlertTriangle, FiX, FiTrash2 } from 'react-icons/fi';
+import { AlertTriangle, X, Trash2 } from 'lucide-react';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -30,11 +30,13 @@ export default function ConfirmModal({ isOpen, title, message, onConfirm, onCanc
             className="relative bg-white rounded-2xl p-7 max-w-sm w-full shadow-2xl"
           >
             <button onClick={onCancel} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 transition-all">
-              <FiX />
+              <X size={16} />
             </button>
             <div className="flex flex-col items-center text-center">
               <div className={`w-14 h-14 ${type === 'danger' ? 'bg-red-100' : 'bg-yellow-100'} rounded-full flex items-center justify-center mb-4`}>
-                {type === 'danger' ? <FiTrash2 className="text-red-500 text-xl" /> : <FiAlertTriangle className="text-yellow-500 text-xl" />}
+                {type === 'danger'
+                  ? <Trash2 size={22} className="text-red-500" />
+                  : <AlertTriangle size={22} className="text-yellow-500" />}
               </div>
               <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
               <p className="text-gray-500 text-sm mb-6">{message}</p>

@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MdNotifications, MdLocalOffer, MdLocalShipping, MdSettings } from 'react-icons/md';
-import { FiCheck, FiTrash2 } from 'react-icons/fi';
+import { Bell, Package, Tag, Settings, Check, Trash2 } from 'lucide-react';
 import { NOTIFICATIONS } from '@/constants/data';
 import { Notification } from '@/types';
 import { toast } from 'sonner';
 
 const TYPE_ICONS: Record<string, React.ElementType> = {
-  order: MdLocalShipping,
-  offer: MdLocalOffer,
-  system: MdSettings,
+  order: Package,
+  offer: Tag,
+  system: Settings,
 };
 const TYPE_COLORS: Record<string, string> = {
   order: 'bg-blue-100 text-blue-500',
@@ -35,26 +34,26 @@ export default function Notifications() {
         </div>
         {unread > 0 && (
           <button onClick={markAllRead} className="flex items-center gap-2 px-4 py-2.5 bg-orange-50 text-orange-500 rounded-xl font-semibold text-sm hover:bg-orange-100 transition-all">
-            <FiCheck /> Mark All Read
+            <Check size={15} /> Mark All Read
           </button>
         )}
       </div>
 
       {notifications.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-200">
-          <MdNotifications className="text-5xl text-gray-300 mx-auto mb-4" />
+          <Bell size={40} className="text-gray-300 mx-auto mb-4" />
           <h3 className="font-bold text-gray-700">No notifications yet</h3>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
           {notifications.map((notif, i) => {
-            const Icon = TYPE_ICONS[notif.type] || MdNotifications;
+            const Icon = TYPE_ICONS[notif.type] || Bell;
             return (
               <motion.div key={notif.id} initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
                 className={`bg-white rounded-2xl p-5 shadow-sm border-l-4 transition-all ${notif.read ? 'border-gray-100 opacity-75' : 'border-orange-400 shadow-orange-50'}`}>
                 <div className="flex items-start gap-4">
                   <div className={`w-10 h-10 ${TYPE_COLORS[notif.type]} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                    <Icon className="text-lg" />
+                    <Icon size={18} />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-2">
@@ -69,7 +68,7 @@ export default function Notifications() {
                     )}
                   </div>
                   <button onClick={() => deleteNotif(notif.id)} className="w-7 h-7 bg-red-50 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-100 transition-all flex-shrink-0">
-                    <FiTrash2 className="text-xs" />
+                    <Trash2 size={12} />
                   </button>
                 </div>
               </motion.div>

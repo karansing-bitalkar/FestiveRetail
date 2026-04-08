@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
-import { HiSparkles } from 'react-icons/hi';
-import { FiShield } from 'react-icons/fi';
+import { Shield } from 'lucide-react';
 
 const SECTIONS = [
   { title: '1. Information We Collect', content: 'We collect information you provide directly to us, including when you create an account, place an order, or contact our support team. This includes: Full name, email address, phone number, shipping and billing addresses, payment information (processed securely via payment gateway), order history and preferences, device information and usage data for improving our services, and communication preferences.' },
@@ -19,7 +18,7 @@ export default function PrivacyPolicy() {
       <section className="py-16 fest-gradient text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4"><FiShield className="text-3xl" /></div>
+            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4"><Shield size={28} /></div>
             <h1 className="text-4xl font-black mb-3">Privacy Policy</h1>
             <p className="text-white/80">Last updated: October 2024</p>
             <p className="text-white/80 mt-3 text-lg">Your privacy matters to us. This policy explains how FestiveRetail collects, uses, and protects your personal information.</p>

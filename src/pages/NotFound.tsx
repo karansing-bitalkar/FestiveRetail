@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FiArrowLeft, FiHome } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi';
+import { ArrowLeft, Home, Sparkles } from 'lucide-react';
 
 export default function NotFound() {
   return (
@@ -13,10 +12,10 @@ export default function NotFound() {
         <p className="text-gray-400 mb-8">The page you're looking for has moved, doesn't exist, or is out celebrating a festival.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link to="/home" className="inline-flex items-center gap-2 px-6 py-3 fest-gradient text-white rounded-xl font-semibold hover:opacity-90 transition-all">
-            <FiHome /> Go Home
+            <Home size={16} /> Go Home
           </Link>
           <Link to="/shop" className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 border border-white/20 text-white rounded-xl font-semibold hover:bg-white/20 transition-all">
-            <HiSparkles /> Browse Shop
+            <Sparkles size={16} /> Browse Shop
           </Link>
         </div>
       </motion.div>

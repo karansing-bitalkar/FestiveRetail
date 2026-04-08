@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiArrowUp } from 'react-icons/fi';
+import { ArrowUp } from 'lucide-react';
 import { useScrollTop } from '@/hooks/useScrollTop';
 
 export default function ScrollToTop() {
@@ -24,7 +24,7 @@ export default function ScrollToTop() {
           className="fixed bottom-6 right-6 z-50 w-12 h-12 fest-gradient rounded-full flex items-center justify-center text-white shadow-lg hover:opacity-90 transition-all glow-orange"
           aria-label="Scroll to top"
         >
-          <FiArrowUp className="text-xl" />
+          <ArrowUp size={20} />
         </motion.button>
       )}
     </AnimatePresence>

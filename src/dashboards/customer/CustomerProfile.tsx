@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiEdit2, FiUser, FiMail, FiPhone, FiCalendar } from 'react-icons/fi';
+import { Edit2, User, Mail, Phone, Calendar } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import Modal from '@/components/features/Modal';
 import { toast } from 'sonner';
@@ -17,7 +17,7 @@ export default function CustomerProfile() {
       <div className="flex items-center justify-between">
         <div><h2 className="text-2xl font-black text-gray-900 mb-1">My Profile</h2><p className="text-gray-500 text-sm">Manage your personal information</p></div>
         <button onClick={() => setShowEdit(true)} className="flex items-center gap-2 px-5 py-2.5 fest-gradient text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all">
-          <FiEdit2 /> Edit Profile
+          <Edit2 size={15} /> Edit Profile
         </button>
       </div>
 
@@ -34,13 +34,13 @@ export default function CustomerProfile() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {[
-            { icon: FiUser, label: 'Full Name', value: user?.name },
-            { icon: FiMail, label: 'Email Address', value: user?.email },
-            { icon: FiPhone, label: 'Phone Number', value: user?.phone || '+91 98765 43210' },
-            { icon: FiCalendar, label: 'Member Since', value: user?.joinedAt },
+            { icon: User, label: 'Full Name', value: user?.name },
+            { icon: Mail, label: 'Email Address', value: user?.email },
+            { icon: Phone, label: 'Phone Number', value: user?.phone || '+91 98765 43210' },
+            { icon: Calendar, label: 'Member Since', value: user?.joinedAt },
           ].map(f => (
             <div key={f.label} className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-              <div className="w-9 h-9 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center flex-shrink-0"><f.icon className="text-lg" /></div>
+              <div className="w-9 h-9 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center flex-shrink-0"><f.icon size={18} /></div>
               <div><div className="text-xs text-gray-400 font-medium">{f.label}</div><div className="text-sm font-semibold text-gray-900">{f.value}</div></div>
             </div>
           ))}

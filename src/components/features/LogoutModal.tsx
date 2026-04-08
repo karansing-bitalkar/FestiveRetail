@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiAlertTriangle, FiX } from 'react-icons/fi';
-import { MdLogout } from 'react-icons/md';
+import { X, LogOut } from 'lucide-react';
 
 interface LogoutModalProps {
   isOpen: boolean;
@@ -32,12 +31,12 @@ export default function LogoutModal({ isOpen, onConfirm, onCancel }: LogoutModal
               onClick={onCancel}
               className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all"
             >
-              <FiX />
+              <X size={16} />
             </button>
 
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                <MdLogout className="text-red-500 text-2xl" />
+                <LogOut size={26} className="text-red-500" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">Confirm Logout</h3>
               <p className="text-gray-500 text-sm mb-6 leading-relaxed">
@@ -54,7 +53,7 @@ export default function LogoutModal({ isOpen, onConfirm, onCancel }: LogoutModal
                   onClick={onConfirm}
                   className="flex-1 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-all flex items-center justify-center gap-2"
                 >
-                  <MdLogout />
+                  <LogOut size={16} />
                   Logout
                 </button>
               </div>

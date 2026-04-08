@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiEdit2, FiMail, FiPhone, FiMapPin, FiCalendar, FiStar } from 'react-icons/fi';
-import { MdVerified, MdStore } from 'react-icons/md';
+import { Edit2, Mail, Phone, MapPin, Calendar, Star, BadgeCheck, Store } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import Modal from '@/components/features/Modal';
 import { toast } from 'sonner';
@@ -18,7 +17,7 @@ export default function VendorProfile() {
       <div className="flex items-center justify-between">
         <div><h2 className="text-2xl font-black text-gray-900 mb-1">Vendor Profile</h2><p className="text-gray-500 text-sm">Manage your store information</p></div>
         <button onClick={() => setShowEdit(true)} className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-purple-500 to-blue-500 text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all">
-          <FiEdit2 /> Edit Profile
+          <Edit2 size={15} /> Edit Profile
         </button>
       </div>
 
@@ -31,22 +30,22 @@ export default function VendorProfile() {
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-2xl font-black text-gray-900">{user?.name}</h3>
-              <MdVerified className="text-blue-500 text-xl" />
+              <BadgeCheck size={20} className="text-blue-500" />
             </div>
             <span className="inline-block px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-xs font-bold mt-1">Verified Vendor</span>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
-            { icon: FiMail, label: 'Email', value: user?.email },
-            { icon: FiPhone, label: 'Phone', value: user?.phone || '+91 87654 32109' },
-            { icon: MdStore, label: 'GST Number', value: form.gst },
-            { icon: FiMapPin, label: 'Location', value: `${form.city}, ${form.state}` },
-            { icon: FiCalendar, label: 'Member Since', value: user?.joinedAt },
-            { icon: FiStar, label: 'Vendor Rating', value: '4.8 / 5.0' },
+            { icon: Mail, label: 'Email', value: user?.email },
+            { icon: Phone, label: 'Phone', value: user?.phone || '+91 87654 32109' },
+            { icon: Store, label: 'GST Number', value: form.gst },
+            { icon: MapPin, label: 'Location', value: `${form.city}, ${form.state}` },
+            { icon: Calendar, label: 'Member Since', value: user?.joinedAt },
+            { icon: Star, label: 'Vendor Rating', value: '4.8 / 5.0' },
           ].map(f => (
             <div key={f.label} className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-              <div className="w-9 h-9 bg-purple-100 text-purple-500 rounded-lg flex items-center justify-center flex-shrink-0"><f.icon className="text-lg" /></div>
+              <div className="w-9 h-9 bg-purple-100 text-purple-500 rounded-lg flex items-center justify-center flex-shrink-0"><f.icon size={18} /></div>
               <div><div className="text-xs text-gray-400 font-medium">{f.label}</div><div className="text-sm font-semibold text-gray-900">{f.value}</div></div>
             </div>
           ))}

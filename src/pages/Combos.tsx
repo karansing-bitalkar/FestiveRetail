@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiStar, FiCheck } from 'react-icons/fi';
-import { HiSparkles, HiLightningBolt } from 'react-icons/hi';
-import { BsGiftFill } from 'react-icons/bs';
+import { ArrowRight, Star, Check, Sparkles, Zap, Gift } from 'lucide-react';
 import { COMBO_PRODUCTS, PRODUCTS } from '@/constants/data';
 import { toast } from 'sonner';
 
@@ -24,7 +22,7 @@ const CUSTOM_BUNDLES = [
 const fadeInUp = { initial: { opacity: 0, y: 30 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.5 } };
 
 export default function Combos() {
-  const handleAddCombo = (name: string) => toast.success(`${name} added to cart!`, { icon: '🎁' });
+  const handleAddCombo = (name: string) => toast.success(`${name} added to cart!`);
 
   return (
     <div>
@@ -34,10 +32,10 @@ export default function Combos() {
         <div className="relative max-w-4xl mx-auto px-4 text-center text-white">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-400/30 rounded-full text-orange-300 text-sm font-medium mb-5">
-              <HiLightningBolt /> Our #1 USP — Exclusive Combo Bundles
+              <Zap size={14} /> Our #1 USP — Exclusive Combo Bundles
             </div>
             <h1 className="text-5xl md:text-6xl font-black mb-4">
-              Festive <span className="fest-text-gradient">Combo Offers</span> 🎁
+              Festive <span className="fest-text-gradient">Combo Offers</span>
             </h1>
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
               Save up to 50% with our expertly curated festive bundles. Everything you need for the perfect celebration, packed together.
@@ -45,7 +43,7 @@ export default function Combos() {
             <div className="flex flex-wrap justify-center gap-4 mb-10">
               {['Save 30–50%', 'Premium Packaging', 'Free Card', 'Fast Delivery'].map(tag => (
                 <span key={tag} className="flex items-center gap-1.5 px-4 py-2 bg-white/10 border border-white/20 rounded-full text-sm">
-                  <FiCheck className="text-green-400" /> {tag}
+                  <Check size={13} className="text-green-400" /> {tag}
                 </span>
               ))}
             </div>
@@ -65,7 +63,7 @@ export default function Combos() {
               <motion.div key={r} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm">
                 <div className="w-7 h-7 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <FiCheck className="text-green-500 text-sm" />
+                  <Check size={13} className="text-green-500" />
                 </div>
                 <span className="text-gray-700 text-sm font-medium">{r}</span>
               </motion.div>
@@ -77,7 +75,7 @@ export default function Combos() {
       {/* Combo products */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...fadeInUp} className="text-center mb-10">
-          <h2 className="text-4xl font-black text-gray-900 mb-3">🔥 Hot Combo Deals</h2>
+          <h2 className="text-4xl font-black text-gray-900 mb-3">Hot Combo Deals</h2>
           <p className="text-gray-500">Handpicked bundles for maximum value</p>
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -91,10 +89,10 @@ export default function Combos() {
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <div className="absolute top-3 left-3 fest-gradient text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
-                    <HiSparkles /> COMBO -{discount}% OFF
+                    <Sparkles size={11} /> COMBO -{discount}% OFF
                   </div>
                   <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-2 py-1">
-                    <FiStar className="text-yellow-400 fill-yellow-400 text-xs" />
+                    <Star size={10} className="text-yellow-400 fill-yellow-400" />
                     <span className="text-white text-xs font-bold">{product.rating}</span>
                     <span className="text-white/70 text-xs">({product.reviews})</span>
                   </div>
@@ -114,7 +112,7 @@ export default function Combos() {
                   </div>
                   <button onClick={() => handleAddCombo(product.name)}
                     className="w-full py-3 fest-gradient text-white rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all">
-                    <BsGiftFill /> Add to Cart
+                    <Gift size={16} /> Add to Cart
                   </button>
                 </div>
               </motion.div>
@@ -154,20 +152,15 @@ export default function Combos() {
         </div>
       </section>
 
-      {/* Savings calculator */}
+      {/* Savings stats */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-br from-orange-500 to-pink-600 rounded-3xl p-10 text-white text-center relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">{[...Array(4)].map((_, i) => <div key={i} className="absolute w-48 h-48 rounded-full border border-white" style={{ right: `${i*20}%`, bottom: '-30%' }} />)}</div>
           <motion.div {...fadeInUp} className="relative">
-            <h2 className="text-3xl font-black mb-3">💰 Total Savings This Season</h2>
+            <h2 className="text-3xl font-black mb-3">Total Savings This Season</h2>
             <p className="text-white/80 mb-8">Our customers have saved over ₹2 crore by choosing combos vs individual products!</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {[
-                { v: '₹2Cr+', l: 'Customer Savings' },
-                { v: '50%', l: 'Max Discount' },
-                { v: '10K+', l: 'Combos Sold' },
-                { v: '4.9★', l: 'Avg Rating' },
-              ].map(s => (
+              {[{ v: '₹2Cr+', l: 'Customer Savings' }, { v: '50%', l: 'Max Discount' }, { v: '10K+', l: 'Combos Sold' }, { v: '4.9★', l: 'Avg Rating' }].map(s => (
                 <div key={s.l} className="bg-white/20 backdrop-blur-sm rounded-2xl p-4">
                   <div className="text-3xl font-black mb-1">{s.v}</div>
                   <div className="text-white/70 text-sm">{s.l}</div>
@@ -187,7 +180,7 @@ export default function Combos() {
               <p className="text-gray-500">Individual products that pair perfectly together</p>
             </div>
             <Link to="/shop" className="hidden md:flex items-center gap-2 px-5 py-2.5 border-2 border-orange-400 text-orange-500 rounded-xl font-semibold hover:bg-orange-50 transition-all text-sm">
-              View All <FiArrowRight />
+              View All <ArrowRight size={14} />
             </Link>
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -207,7 +200,7 @@ export default function Combos() {
         </div>
       </section>
 
-      {/* FAQ about combos */}
+      {/* FAQ */}
       <section className="py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...fadeInUp} className="text-center mb-10">
           <h2 className="text-3xl font-black text-gray-900 mb-3">Combo FAQs</h2>

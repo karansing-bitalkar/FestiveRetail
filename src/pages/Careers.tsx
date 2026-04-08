@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiMapPin, FiClock, FiBriefcase, FiArrowRight } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi';
+import { MapPin, Clock, Briefcase, ArrowRight, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 const OPEN_ROLES = [
@@ -44,7 +43,7 @@ export default function Careers() {
         <div className="absolute inset-0 opacity-10">{[...Array(5)].map((_, i) => <div key={i} className="absolute w-80 h-80 rounded-full border border-white" style={{ right: `${i*20}%`, top: '-30%' }} />)}</div>
         <div className="relative max-w-4xl mx-auto px-4 text-center text-white">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium mb-5"><HiSparkles /> We're Hiring!</div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium mb-5"><Sparkles size={14} /> We're Hiring!</div>
             <h1 className="text-5xl font-black mb-4">Build the Future of<br />Festive Commerce</h1>
             <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">Join our mission to bring joy to millions of Indians during their most special celebrations. Work on impactful products used by lakhs of customers.</p>
             <div className="flex justify-center gap-8">
@@ -115,9 +114,9 @@ export default function Careers() {
                 <div className="flex-1">
                   <div className="flex flex-wrap gap-2 mb-2">
                     <span className="text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded-full">{role.dept}</span>
-                    <span className="flex items-center gap-1 text-xs text-gray-500"><FiMapPin className="text-xs" />{role.location}</span>
-                    <span className="flex items-center gap-1 text-xs text-gray-500"><FiClock className="text-xs" />{role.type}</span>
-                    <span className="flex items-center gap-1 text-xs text-gray-500"><FiBriefcase className="text-xs" />{role.exp}</span>
+                    <span className="flex items-center gap-1 text-xs text-gray-500"><MapPin size={10} />{role.location}</span>
+                    <span className="flex items-center gap-1 text-xs text-gray-500"><Clock size={10} />{role.type}</span>
+                    <span className="flex items-center gap-1 text-xs text-gray-500"><Briefcase size={10} />{role.exp}</span>
                   </div>
                   <h3 className="font-bold text-gray-900 text-lg mb-1">{role.title}</h3>
                   <p className="text-gray-500 text-sm">{role.desc}</p>
@@ -127,7 +126,7 @@ export default function Careers() {
                   disabled={applied === role.title}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all ${applied === role.title ? 'bg-green-100 text-green-600 cursor-not-allowed' : 'fest-gradient text-white hover:opacity-90'}`}
                 >
-                  {applied === role.title ? '✓ Applied' : <>Apply Now <FiArrowRight /></>}
+                  {applied === role.title ? '✓ Applied' : <>Apply Now <ArrowRight size={14} /></>}
                 </button>
               </div>
             </motion.div>
@@ -167,7 +166,7 @@ export default function Careers() {
             <h2 className="text-3xl font-black mb-3">Don't see a fit? We'd still love to hear from you!</h2>
             <p className="text-white/80 mb-6">Send your resume to careers@festiveretail.com. We're always looking for talented people.</p>
             <a href="mailto:careers@festiveretail.com" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-orange-500 rounded-2xl font-bold hover:bg-orange-50 transition-all shadow-lg">
-              Send Your Resume <FiArrowRight />
+              Send Your Resume <ArrowRight size={16} />
             </a>
           </motion.div>
         </div>

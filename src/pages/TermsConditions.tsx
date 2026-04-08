@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiFileText } from 'react-icons/fi';
+import { FileText } from 'lucide-react';
 
 const SECTIONS = [
   { title: '1. Acceptance of Terms', content: 'By accessing and using FestiveRetail\'s platform, mobile application, and services, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our services. These terms apply to all visitors, users, customers, vendors, and all others who access or use our services.' },
@@ -18,7 +18,7 @@ export default function TermsConditions() {
       <section className="py-16 fest-gradient-dark text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4"><FiFileText className="text-3xl" /></div>
+            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4"><FileText size={26} /></div>
             <h1 className="text-4xl font-black mb-3">Terms & Conditions</h1>
             <p className="text-gray-400">Last updated: October 2024 · Effective immediately</p>
             <p className="text-gray-300 mt-3 text-lg">Please read these terms carefully before using FestiveRetail's services.</p>

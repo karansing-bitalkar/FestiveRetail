@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX } from 'react-icons/fi';
+import { X } from 'lucide-react';
 
 interface ModalProps {
   isOpen: boolean;
@@ -31,7 +31,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
             <div className="flex items-center justify-between p-6 border-b border-gray-100">
               <h2 className="text-lg font-bold text-gray-900">{title}</h2>
               <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all">
-                <FiX className="text-xl" />
+                <X size={18} />
               </button>
             </div>
             <div className="p-6">{children}</div>

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiShoppingCart, FiHeart, FiStar, FiEye } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi';
+import { ShoppingCart, Heart, Star, Eye, Sparkles } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Product } from '@/types';
 import { useAuth } from '@/hooks/useAuth';
@@ -57,7 +56,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
             {product.isCombo && (
               <span className="fest-gradient text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
-                <HiSparkles className="text-xs" /> COMBO
+                <Sparkles size={10} /> COMBO
               </span>
             )}
           </div>
@@ -67,12 +66,12 @@ export default function ProductCard({ product }: ProductCardProps) {
               onClick={handleWishlist}
               className={`w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center transition-all shadow-md ${wishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
             >
-              <FiHeart className={`text-sm ${wishlisted ? 'fill-red-500' : ''}`} />
+              <Heart size={14} className={wishlisted ? 'fill-red-500' : ''} />
             </button>
             <Link to={`/product/${product.id}`}
               className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-orange-500 transition-all shadow-md"
             >
-              <FiEye className="text-sm" />
+              <Eye size={14} />
             </Link>
           </div>
           <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
@@ -80,7 +79,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               onClick={handleAddToCart}
               className="w-full py-2.5 fest-gradient text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-lg"
             >
-              <FiShoppingCart /> Add to Cart
+              <ShoppingCart size={15} /> Add to Cart
             </button>
           </div>
         </div>
@@ -92,7 +91,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <h3 className="font-semibold text-gray-900 text-sm leading-tight mb-2 line-clamp-2 hover:text-orange-500 transition-colors">{product.name}</h3>
           </Link>
           <div className="flex items-center gap-1 mb-2">
-            <FiStar className="text-yellow-400 fill-yellow-400 text-xs" />
+            <Star size={12} className="text-yellow-400 fill-yellow-400" />
             <span className="text-xs font-semibold text-gray-700">{product.rating || '4.5'}</span>
             <span className="text-xs text-gray-400">({product.reviews || 0})</span>
           </div>

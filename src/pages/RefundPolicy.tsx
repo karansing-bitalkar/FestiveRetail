@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiRefreshCw, FiCheck, FiX } from 'react-icons/fi';
+import { RefreshCw, Check, X } from 'lucide-react';
 
 const RETURN_ELIGIBLE = ['Damaged or defective products', 'Wrong product delivered', 'Products not matching description', 'Missing items in combo bundles', 'Expired products (if applicable)', 'Quality issues verified by support team'];
 const RETURN_INELIGIBLE = ['Products after 7-day return window', 'Used/consumed products', 'Products without original packaging', 'Customized/personalized items', 'Digital products', 'Perishable items (sweets, flowers)'];
@@ -28,7 +28,7 @@ export default function RefundPolicy() {
       <section className="py-16 bg-gradient-to-br from-green-600 to-teal-600 text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4"><FiRefreshCw className="text-3xl" /></div>
+            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4"><RefreshCw size={26} /></div>
             <h1 className="text-4xl font-black mb-3">Return & Refund Policy</h1>
             <p className="text-white/80">Last updated: October 2024</p>
             <p className="text-white/80 mt-3 text-lg">We offer hassle-free returns and fast refunds. Your satisfaction is our priority.</p>
@@ -46,15 +46,15 @@ export default function RefundPolicy() {
         {/* Eligible / Not eligible */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           <motion.div {...fadeInUp} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><FiCheck className="text-green-500" /> Return Eligible</h3>
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><Check size={16} className="text-green-500" /> Return Eligible</h3>
             <ul className="flex flex-col gap-2">{RETURN_ELIGIBLE.map(i => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-600"><FiCheck className="text-green-500 mt-0.5 flex-shrink-0" />{i}</li>
+              <li key={i} className="flex items-start gap-2 text-sm text-gray-600"><Check size={13} className="text-green-500 mt-0.5 flex-shrink-0" />{i}</li>
             ))}</ul>
           </motion.div>
           <motion.div {...fadeInUp} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><FiX className="text-red-500" /> Not Eligible for Return</h3>
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><X size={16} className="text-red-500" /> Not Eligible for Return</h3>
             <ul className="flex flex-col gap-2">{RETURN_INELIGIBLE.map(i => (
-              <li key={i} className="flex items-start gap-2 text-sm text-gray-600"><FiX className="text-red-400 mt-0.5 flex-shrink-0" />{i}</li>
+              <li key={i} className="flex items-start gap-2 text-sm text-gray-600"><X size={13} className="text-red-400 mt-0.5 flex-shrink-0" />{i}</li>
             ))}</ul>
           </motion.div>
         </div>

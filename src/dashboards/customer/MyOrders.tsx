@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiSearch, FiXCircle } from 'react-icons/fi';
-import { MdLocalShipping, MdCheck, MdRadar } from 'react-icons/md';
+import { Search, XCircle, Truck, Check, Navigation } from 'lucide-react';
 import { ORDERS } from '@/constants/data';
 import ConfirmModal from '@/components/features/ConfirmModal';
 import { toast } from 'sonner';
@@ -15,7 +14,6 @@ const STATUS_COLORS: Record<string, string> = {
   cancelled: 'bg-red-100 text-red-700 border-red-200',
 };
 
-// Progress % per status
 const STATUS_PROGRESS: Record<string, number> = {
   pending: 20,
   processing: 40,
@@ -44,7 +42,7 @@ function MiniProgressBar({ status }: { status: string }) {
   return (
     <div className="mt-3">
       <div className="flex justify-between mb-1">
-        {STATUS_STAGES.map((s, i) => {
+        {STATUS_STAGES.map((s) => {
           const stagePct = STATUS_PROGRESS[s];
           const done = pct >= stagePct;
           const isCurrent = status === s;
@@ -111,7 +109,7 @@ export default function MyOrders() {
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input type="text" placeholder="Search orders..." value={search} onChange={e => setSearch(e.target.value)}
             className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm" />
         </div>
@@ -143,8 +141,6 @@ export default function MyOrders() {
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-1 line-clamp-1">{order.products.map(p => p.name).join(', ')}</h4>
                 <p className="text-gray-400 text-xs line-clamp-1">{order.address}</p>
-
-                {/* ── Mini Progress Bar ── */}
                 <MiniProgressBar status={order.status} />
               </div>
 
@@ -154,27 +150,26 @@ export default function MyOrders() {
                   <div className="text-xs text-gray-400">{order.products.reduce((s, p) => s + p.qty, 0)} item(s)</div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  {/* ── Track Order Button ── */}
                   <button
                     onClick={() => navigate(`/track/${order.id}`)}
                     className="flex items-center gap-1 px-3 py-2 bg-orange-50 text-orange-500 rounded-lg text-xs font-semibold hover:bg-orange-100 transition-all whitespace-nowrap"
                   >
-                    <MdRadar className="text-sm" /> Track
+                    <Navigation size={12} /> Track
                   </button>
                   {order.status === 'shipped' && (
                     <button className="flex items-center gap-1 px-3 py-2 bg-purple-50 text-purple-600 rounded-lg text-xs font-semibold hover:bg-purple-100 transition-all">
-                      <MdLocalShipping className="text-sm" /> Live
+                      <Truck size={12} /> Live
                     </button>
                   )}
                   {(order.status === 'pending' || order.status === 'processing') && (
                     <button onClick={() => setCancelOrder(order.id)}
                       className="flex items-center gap-1 px-3 py-2 bg-red-50 text-red-500 rounded-lg text-xs font-semibold hover:bg-red-100 transition-all">
-                      <FiXCircle className="text-sm" /> Cancel
+                      <XCircle size={12} /> Cancel
                     </button>
                   )}
                   {order.status === 'delivered' && (
                     <button className="flex items-center gap-1 px-3 py-2 bg-green-50 text-green-600 rounded-lg text-xs font-semibold hover:bg-green-100 transition-all">
-                      <MdCheck className="text-sm" /> Review
+                      <Check size={12} /> Review
                     </button>
                   )}
                 </div>

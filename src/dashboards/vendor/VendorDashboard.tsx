@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MdCategory, MdLocalShipping, MdInventory, MdAttachMoney, MdTrendingUp, MdStar } from 'react-icons/md';
-import { FiArrowRight, FiArrowUp } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi';
+import { Package, Truck, BarChart2, DollarSign, ArrowRight, ArrowUp, Sparkles } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { ORDERS } from '@/constants/data';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
@@ -15,10 +13,10 @@ const SALES_DATA = [
 export default function VendorDashboard() {
   const { user } = useAuth();
   const stats = [
-    { label: 'Total Products', value: 24, icon: MdCategory, color: 'from-orange-400 to-red-400', link: '/dashboard/vendor/products', change: '+3 this week' },
-    { label: 'Pending Orders', value: 8, icon: MdLocalShipping, color: 'from-blue-400 to-purple-400', link: '/dashboard/vendor/orders', change: '2 urgent' },
-    { label: 'Low Stock', value: 3, icon: MdInventory, color: 'from-yellow-400 to-orange-400', link: '/dashboard/vendor/inventory', change: 'Needs restock' },
-    { label: 'Total Earnings', value: '₹1.2L', icon: MdAttachMoney, color: 'from-green-400 to-teal-400', link: '/dashboard/vendor/earnings', change: '+18% this month' },
+    { label: 'Total Products', value: 24, icon: Package, color: 'from-orange-400 to-red-400', link: '/dashboard/vendor/products', change: '+3 this week' },
+    { label: 'Pending Orders', value: 8, icon: Truck, color: 'from-blue-400 to-purple-400', link: '/dashboard/vendor/orders', change: '2 urgent' },
+    { label: 'Low Stock', value: 3, icon: BarChart2, color: 'from-yellow-400 to-orange-400', link: '/dashboard/vendor/inventory', change: 'Needs restock' },
+    { label: 'Total Earnings', value: '₹1.2L', icon: DollarSign, color: 'from-green-400 to-teal-400', link: '/dashboard/vendor/earnings', change: '+18% this month' },
   ];
 
   return (
@@ -28,11 +26,11 @@ export default function VendorDashboard() {
         className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl p-7 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">{[...Array(4)].map((_, i) => <div key={i} className="absolute w-40 h-40 rounded-full border border-white" style={{ right: `${i*15}%`, top: '-30%' }} />)}</div>
         <div className="relative">
-          <div className="flex items-center gap-2 text-white/80 text-sm mb-2"><HiSparkles /> Diwali Season is Peak Time!</div>
+          <div className="flex items-center gap-2 text-white/80 text-sm mb-2"><Sparkles size={14} /> Diwali Season is Peak Time!</div>
           <h2 className="text-2xl font-black mb-1">Welcome, {user?.name}! 🚀</h2>
           <p className="text-white/80 mb-5">Your store is performing 18% better than last month. Keep it up!</p>
           <Link to="/dashboard/vendor/products" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-purple-600 rounded-xl font-bold text-sm hover:bg-purple-50 transition-all">
-            Add Products <FiArrowRight />
+            Add Products <ArrowRight size={15} />
           </Link>
         </div>
       </motion.div>
@@ -44,7 +42,7 @@ export default function VendorDashboard() {
           return (
             <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}>
               <Link to={s.link} className={`block p-5 bg-gradient-to-br ${s.color} rounded-2xl text-white hover:opacity-90 transition-all shadow-sm hover:shadow-md`}>
-                <Icon className="text-3xl mb-3 opacity-80" />
+                <Icon size={28} className="mb-3 opacity-80" />
                 <div className="text-3xl font-black mb-0.5">{s.value}</div>
                 <div className="text-white/80 text-sm font-medium mb-1">{s.label}</div>
                 <div className="text-white/60 text-xs">{s.change}</div>
@@ -62,7 +60,7 @@ export default function VendorDashboard() {
             <h3 className="text-lg font-bold text-gray-900">Sales Overview</h3>
             <p className="text-gray-400 text-sm">Monthly revenue (₹)</p>
           </div>
-          <div className="flex items-center gap-1 text-green-500 font-semibold text-sm"><FiArrowUp /><span>+18% vs last month</span></div>
+          <div className="flex items-center gap-1 text-green-500 font-semibold text-sm"><ArrowUp size={14} /><span>+18% vs last month</span></div>
         </div>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart data={SALES_DATA}>
@@ -84,7 +82,7 @@ export default function VendorDashboard() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-gray-900">Recent Orders</h3>
-          <Link to="/dashboard/vendor/orders" className="text-orange-500 text-sm font-semibold flex items-center gap-1">View All <FiArrowRight /></Link>
+          <Link to="/dashboard/vendor/orders" className="text-orange-500 text-sm font-semibold flex items-center gap-1">View All <ArrowRight size={14} /></Link>
         </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <table className="w-full">

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiSearch } from 'react-icons/fi';
-import { MdCheckCircle, MdCancel, MdVisibility } from 'react-icons/md';
+import { Search, CheckCircle, XCircle, Eye } from 'lucide-react';
 import { PRODUCTS } from '@/constants/data';
 import { toast } from 'sonner';
 
@@ -31,7 +30,7 @@ export default function ProductModeration() {
       </div>
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-sm">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input type="text" placeholder="Search products..." value={search} onChange={e => setSearch(e.target.value)} className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm" />
         </div>
         <div className="flex gap-2">
@@ -62,10 +61,10 @@ export default function ProductModeration() {
                   <td className="px-5 py-4">
                     <div className="flex gap-1.5">
                       {(p as any).moderationStatus === 'pending' && (<>
-                        <button onClick={() => handleModerate(p.id, 'approved')} className="p-1.5 bg-green-50 text-green-500 rounded-lg hover:bg-green-100 transition-all"><MdCheckCircle /></button>
-                        <button onClick={() => handleModerate(p.id, 'rejected')} className="p-1.5 bg-red-50 text-red-400 rounded-lg hover:bg-red-100 transition-all"><MdCancel /></button>
+                        <button onClick={() => handleModerate(p.id, 'approved')} className="p-1.5 bg-green-50 text-green-500 rounded-lg hover:bg-green-100 transition-all"><CheckCircle size={14} /></button>
+                        <button onClick={() => handleModerate(p.id, 'rejected')} className="p-1.5 bg-red-50 text-red-400 rounded-lg hover:bg-red-100 transition-all"><XCircle size={14} /></button>
                       </>)}
-                      <button className="p-1.5 bg-blue-50 text-blue-400 rounded-lg hover:bg-blue-100 transition-all"><MdVisibility /></button>
+                      <button className="p-1.5 bg-blue-50 text-blue-400 rounded-lg hover:bg-blue-100 transition-all"><Eye size={14} /></button>
                     </div>
                   </td>
                 </motion.tr>
