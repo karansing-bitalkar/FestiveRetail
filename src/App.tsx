@@ -54,6 +54,7 @@ import AdminProducts from "./dashboards/admin/AdminProducts";
 import OrdersMonitoring from "./dashboards/admin/OrdersMonitoring";
 import RevenueAnalytics from "./dashboards/admin/RevenueAnalytics";
 import Settings from "./dashboards/admin/Settings";
+import ScrollToTop from "./components/features/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -63,13 +64,13 @@ const App = () => (
       <Toaster />
       <Sonner position="top-right" richColors />
       <BrowserRouter>
+      <ScrollToTop />
         <Routes>
-          {/* Root redirect */}
-          <Route path="/" element={<Navigate to="/home" replace />} />
+      
 
           {/* Public routes with Navbar+Footer */}
           <Route element={<PublicLayout />}>
-            <Route path="/home" element={<Home />} />
+            <Route index element={<Home />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/categories" element={<Categories />} />

@@ -179,7 +179,7 @@ export default function Contact() {
       </section>
 
       {/* Social */}
-      <section className="py-16 fest-gradient text-white text-center">
+      {/* <section className="py-16 fest-gradient text-white text-center">
         <div className="max-w-2xl mx-auto px-4">
           <motion.div {...fadeInUp}>
             <h2 className="text-3xl font-black mb-3">Connect on Social Media</h2>
@@ -191,7 +191,7 @@ export default function Contact() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

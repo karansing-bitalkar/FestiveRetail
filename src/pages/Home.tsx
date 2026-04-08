@@ -7,10 +7,10 @@ import ProductCard from '@/components/features/ProductCard';
 import heroBanner from '@/assets/hero-banner.jpg';
 
 const FESTIVALS = [
-  { name: 'Diwali', img: 'https://images.unsplash.com/photo-1574169208507-84376144848b?w=600&h=400&fit=crop&q=80&auto=format', color: 'from-orange-600 to-red-600', desc: 'Diyas, Puja Sets & Hampers' },
-  { name: 'Holi', img: 'https://images.unsplash.com/photo-1583361704493-d4d4d3c13a2f?w=600&h=400&fit=crop&q=80&auto=format', color: 'from-pink-500 to-purple-600', desc: 'Colors, Water Guns & Gulal' },
-  { name: 'Wedding', img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=400&fit=crop&q=80&auto=format', color: 'from-yellow-500 to-orange-600', desc: 'Gifts, Décor & Favours' },
-  { name: 'Ganesh', img: 'https://images.unsplash.com/photo-1567591370654-f2a047ba62d0?w=600&h=400&fit=crop&q=80&auto=format', color: 'from-blue-500 to-indigo-600', desc: 'Idols, Puja Items & Décor' },
+  { name: 'Diwali', img: 'https://images.unsplash.com/photo-1666244454829-7f0889ec5783?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGRpd2FsaSUyMGZlc3RpdmFsfGVufDB8fDB8fHww', color: 'from-orange-600 to-red-600', desc: 'Diyas, Puja Sets & Hampers' },
+  { name: 'Holi', img: "https://images.unsplash.com/photo-1603228254119-e6a4d095dc59?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aG9saXxlbnwwfHwwfHx8MA%3D%3D", color: 'from-pink-500 to-purple-600', desc: 'Colors, Water Guns & Gulal' },
+  { name: 'Cristmas', img: "https://images.unsplash.com/photo-1670747135013-428f1c35836a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y3Jpc3RtYXMlMjB0cmVlfGVufDB8fDB8fHww", color: 'from-yellow-500 to-orange-600', desc: 'Gifts, Décor & Favours' },
+  { name: 'Ganesh', img: 'https://images.unsplash.com/photo-1567878673047-0451c851056e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z2FuZXNofGVufDB8fDB8fHww ', color: 'from-blue-500 to-indigo-600', desc: 'Idols, Puja Items & Décor' },
 ];
 
 const CATEGORY_FILTERS = ['All', 'Diwali', 'Holi', 'Wedding', 'Ganesh Chaturthi', 'Birthday', 'Christmas'];
@@ -197,7 +197,7 @@ export default function Home() {
       )}
 
       {/* CTA Banner */}
-      <section className="py-20 fest-gradient text-white text-center">
+      {/* <section className="py-20 fest-gradient text-white text-center">
         <div className="max-w-2xl mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-4xl font-black mb-4">Ready to Celebrate?</h2>
@@ -207,7 +207,7 @@ export default function Home() {
             </Link>
           </motion.div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

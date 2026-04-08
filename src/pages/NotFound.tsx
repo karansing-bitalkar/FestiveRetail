@@ -13,7 +13,7 @@ export default function NotFound() {
         <h2 className="text-2xl font-black text-gray-900 mb-3">Page Not Found</h2>
         <p className="text-gray-500 mb-8">The page you're looking for doesn't exist or has been moved.</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link to="/home" className="flex items-center justify-center gap-2 px-6 py-3 fest-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">
+          <Link to="/" className="flex items-center justify-center gap-2 px-6 py-3 fest-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">
             <Home size={16} /> Go Home
           </Link>
           <button onClick={() => window.history.back()} className="flex items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-bold hover:border-orange-400 transition-all">

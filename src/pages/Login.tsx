@@ -43,7 +43,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        <Link to="/home" className="flex items-center gap-2 text-gray-500 hover:text-orange-500 transition-colors mb-8 text-sm font-medium">
+        <Link to="/ " className="flex items-center gap-2 text-gray-500 hover:text-orange-500 transition-colors mb-8 text-sm font-medium">
           <ArrowLeft size={16} /> Back to Home
         </Link>
 

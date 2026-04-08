@@ -157,7 +157,7 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 fest-gradient text-white text-center">
+      {/* <section className="py-20 fest-gradient text-white text-center">
         <div className="max-w-2xl mx-auto px-4">
           <motion.div {...fadeInUp}>
             <h2 className="text-4xl font-black mb-4">Join the FestiveRetail Family 🎉</h2>
@@ -168,7 +168,7 @@ export default function About() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Instagram, Facebook, Twitter, Youtube, Sparkles, M
 
 const FOOTER_LINKS = {
   'Quick Links': [
-    { label: 'Home', path: '/home' },
+    { label: 'Home', path: '/' },
     { label: 'Shop', path: '/shop' },
     { label: 'Categories', path: '/categories' },
     { label: 'Combo Offers', path: '/combos' },
@@ -96,13 +96,14 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Links */}
+          {/* Links Section - FIXED HERE */}
           {Object.entries(FOOTER_LINKS).map(([title, links]) => (
             <div key={title}>
               <h4 className="text-white font-semibold mb-4">{title}</h4>
               <ul className="flex flex-col gap-2">
-                {links.map(link => (
-                  <li key={link.path}>
+                {links.map((link, index) => (
+                  // Using path + label + index to ensure uniqueness even if paths match
+                  <li key={`${link.path}-${link.label}-${index}`}>
                     <Link
                       to={link.path}
                       className="text-sm text-gray-400 hover:text-orange-400 transition-colors flex items-center gap-1 group"

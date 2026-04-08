@@ -28,7 +28,7 @@ export default function OrderTracking() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
-        <Link to="/home" className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-600 shadow-sm hover:text-orange-500 transition-colors border border-gray-100">
+        <Link to="/" className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-600 shadow-sm hover:text-orange-500 transition-colors border border-gray-100">
           <ArrowLeft size={18} />
         </Link>
         <div>

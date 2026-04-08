@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useProductStore } from '@/stores/productStore';
 
 const NAV_LINKS = [
-  { label: 'Home', path: '/home' },
+  { label: 'Home', path: '/' },
   { label: 'Shop', path: '/shop' },
   { label: 'Categories', path: '/categories' },
   { label: 'Combos', path: '/combos' },
@@ -52,7 +52,7 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
     setUserMenuOpen(false);
-    navigate('/home');
+    navigate('/');
   };
 
   const dashboardPath = user ? `/dashboard/${user.role}` : '/login';
@@ -61,7 +61,7 @@ export default function Navbar() {
     <>
       {/* Top announcement bar */}
       <div className="fixed top-0 left-0 right-0 z-50 fest-gradient text-white text-center text-xs py-2 font-medium">
-        🎉 Free delivery on orders above ₹999 | Use code <strong>FESTIVE20</strong> for 20% off!
+         Free delivery on orders above ₹999 | Use code <strong>FESTIVE20</strong> for 20% off!
       </div>
 
       {/* Main navbar */}
@@ -69,7 +69,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/home" className="flex items-center gap-2 flex-shrink-0">
+            <Link to="/" className="flex items-center gap-2 flex-shrink-0">
               <div className="w-9 h-9 fest-gradient rounded-xl flex items-center justify-center shadow-sm">
                 <Sparkles size={16} className="text-white" />
               </div>

@@ -57,7 +57,7 @@ export default function DashboardLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate('/home');
+    navigate('/');
   };
 
   const roleColors = {
@@ -178,7 +178,7 @@ export default function DashboardLayout() {
             </h2>
             <p className="text-xs text-gray-400 capitalize">{role} · {user?.name}</p>
           </div>
-          <Link to="/home" className="text-xs text-orange-500 font-semibold hover:text-orange-600 transition-colors flex items-center gap-1">
+          <Link to="/" className="text-xs text-orange-500 font-semibold hover:text-orange-600 transition-colors flex items-center gap-1">
             ← Back to Shop
           </Link>
         </header>
