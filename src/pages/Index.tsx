@@ -1,2 +1,5 @@
 import { Navigate } from 'react-router-dom';
-export default function Index() { return <Navigate to="/home" replace />; }
+
+export default function Index() {
+  return <Navigate to="/home" replace />;
+}

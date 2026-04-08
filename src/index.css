@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800&display=swap');
 
 @layer base {
   :root {
@@ -35,7 +35,6 @@
     --sidebar-border: 240 20% 18%;
     --sidebar-ring: 25 100% 55%;
 
-    /* Festive custom vars */
     --fest-orange: 25 100% 52%;
     --fest-magenta: 330 85% 55%;
     --fest-gold: 45 100% 55%;

@@ -1,81 +1,83 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Package, Tag, Settings, Check, Trash2 } from 'lucide-react';
+import { Bell, ShoppingBag, Tag, Settings, Check, Trash2 } from 'lucide-react';
 import { NOTIFICATIONS } from '@/constants/data';
 import { Notification } from '@/types';
 import { toast } from 'sonner';
 
-const TYPE_ICONS: Record<string, React.ElementType> = {
-  order: Package,
+const ICON_MAP: Record<string, any> = {
+  order: ShoppingBag,
   offer: Tag,
   system: Settings,
 };
-const TYPE_COLORS: Record<string, string> = {
-  order: 'bg-blue-100 text-blue-500',
-  offer: 'bg-orange-100 text-orange-500',
-  system: 'bg-gray-100 text-gray-500',
+
+const COLOR_MAP: Record<string, string> = {
+  order: 'bg-orange-100 text-orange-500',
+  offer: 'bg-green-100 text-green-500',
+  system: 'bg-blue-100 text-blue-500',
 };
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState<Notification[]>(NOTIFICATIONS);
 
-  const markAllRead = () => { setNotifications(n => n.map(x => ({ ...x, read: true }))); toast.success('All notifications marked as read'); };
   const markRead = (id: string) => setNotifications(n => n.map(x => x.id === id ? { ...x, read: true } : x));
+  const markAllRead = () => setNotifications(n => n.map(x => ({ ...x, read: true })));
   const deleteNotif = (id: string) => { setNotifications(n => n.filter(x => x.id !== id)); toast.success('Notification deleted'); };
 
-  const unread = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <div className="flex flex-col gap-6 max-w-2xl">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-black text-gray-900 mb-1">Notifications</h2>
-          <p className="text-gray-500 text-sm">{unread} unread notification{unread !== 1 ? 's' : ''}</p>
+          <p className="text-gray-500 text-sm">{unreadCount} unread</p>
         </div>
-        {unread > 0 && (
-          <button onClick={markAllRead} className="flex items-center gap-2 px-4 py-2.5 bg-orange-50 text-orange-500 rounded-xl font-semibold text-sm hover:bg-orange-100 transition-all">
-            <Check size={15} /> Mark All Read
+        {unreadCount > 0 && (
+          <button onClick={markAllRead} className="text-sm text-orange-500 font-semibold hover:text-orange-600 transition-colors flex items-center gap-1">
+            <Check size={14} /> Mark all read
           </button>
         )}
       </div>
 
-      {notifications.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-200">
-          <Bell size={40} className="text-gray-300 mx-auto mb-4" />
-          <h3 className="font-bold text-gray-700">No notifications yet</h3>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {notifications.map((notif, i) => {
-            const Icon = TYPE_ICONS[notif.type] || Bell;
-            return (
-              <motion.div key={notif.id} initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
-                className={`bg-white rounded-2xl p-5 shadow-sm border-l-4 transition-all ${notif.read ? 'border-gray-100 opacity-75' : 'border-orange-400 shadow-orange-50'}`}>
-                <div className="flex items-start gap-4">
-                  <div className={`w-10 h-10 ${TYPE_COLORS[notif.type]} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                    <Icon size={18} />
+      <div className="flex flex-col gap-3">
+        {notifications.length === 0 ? (
+          <div className="bg-white rounded-2xl p-12 text-center border border-gray-100 shadow-sm">
+            <Bell size={32} className="text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-400">No notifications yet</p>
+          </div>
+        ) : notifications.map((n, i) => {
+          const Icon = ICON_MAP[n.type] || Bell;
+          return (
+            <motion.div key={n.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}
+              className={`bg-white rounded-2xl p-4 shadow-sm border-2 transition-all ${n.read ? 'border-gray-100' : 'border-orange-200 bg-orange-50/30'}`}>
+              <div className="flex items-start gap-4">
+                <div className={`w-10 h-10 ${COLOR_MAP[n.type] || 'bg-gray-100 text-gray-500'} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                  <Icon size={18} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className={`text-sm font-bold ${n.read ? 'text-gray-700' : 'text-gray-900'}`}>{n.title}</p>
+                    {!n.read && <div className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0" />}
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <h4 className={`font-semibold text-sm ${notif.read ? 'text-gray-600' : 'text-gray-900'}`}>{notif.title}</h4>
-                      <span className="text-xs text-gray-400 whitespace-nowrap">{notif.createdAt}</span>
-                    </div>
-                    <p className="text-gray-500 text-sm mt-0.5 leading-relaxed">{notif.message}</p>
-                    {!notif.read && (
-                      <div className="flex items-center gap-3 mt-2">
-                        <button onClick={() => markRead(notif.id)} className="text-xs text-orange-500 font-semibold hover:text-orange-600">Mark as read</button>
-                      </div>
-                    )}
-                  </div>
-                  <button onClick={() => deleteNotif(notif.id)} className="w-7 h-7 bg-red-50 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-100 transition-all flex-shrink-0">
-                    <Trash2 size={12} />
+                  <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{n.message}</p>
+                  <p className="text-xs text-gray-400 mt-1.5">{n.createdAt}</p>
+                </div>
+                <div className="flex flex-col gap-1 flex-shrink-0">
+                  {!n.read && (
+                    <button onClick={() => markRead(n.id)} className="w-7 h-7 bg-green-50 text-green-500 rounded-lg flex items-center justify-center hover:bg-green-100 transition-all" title="Mark read">
+                      <Check size={13} />
+                    </button>
+                  )}
+                  <button onClick={() => deleteNotif(n.id)} className="w-7 h-7 bg-gray-50 text-gray-400 rounded-lg flex items-center justify-center hover:bg-red-50 hover:text-red-400 transition-all" title="Delete">
+                    <Trash2 size={13} />
                   </button>
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      )}
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 }

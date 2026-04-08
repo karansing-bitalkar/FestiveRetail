@@ -1,18 +1,15 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { X, Sparkles, LogIn, UserPlus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-interface AuthGuardModalProps {
+interface Props {
   isOpen: boolean;
   onClose: () => void;
-  action?: string;
+  message?: string;
 }
 
-export default function AuthGuardModal({ isOpen, onClose, action = 'continue' }: AuthGuardModalProps) {
+export default function AuthGuardModal({ isOpen, onClose, message = 'Please login to continue' }: Props) {
   const navigate = useNavigate();
-
-  const handleLogin = () => { onClose(); navigate('/login'); };
-  const handleRegister = () => { onClose(); navigate('/register'); };
 
   return (
     <AnimatePresence>
@@ -21,53 +18,38 @@ export default function AuthGuardModal({ isOpen, onClose, action = 'continue' }:
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
           <motion.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: 'spring', damping: 22 }}
-            className="relative bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden"
+            className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6 text-center"
           >
-            <div className="fest-gradient px-6 pt-8 pb-6 text-center">
-              <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                <Sparkles size={30} className="text-white" />
-              </div>
-              <h2 className="text-xl font-black text-white">Login Required</h2>
-              <p className="text-white/80 text-sm mt-1">
-                Please login or register to {action}
-              </p>
-            </div>
-
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-xl bg-white/20 text-white hover:bg-white/30 transition-all"
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 transition-all"
             >
-              <X size={16} />
+              <X size={14} />
             </button>
-
-            <div className="p-6 flex flex-col gap-3">
+            <div className="w-16 h-16 fest-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+              <Sparkles size={28} className="text-white" />
+            </div>
+            <h3 className="text-xl font-black text-gray-900 mb-2">Login Required</h3>
+            <p className="text-gray-500 text-sm mb-6">{message}</p>
+            <div className="flex gap-3">
               <button
-                onClick={handleLogin}
-                className="flex items-center justify-center gap-2 w-full py-3.5 fest-gradient text-white rounded-2xl font-bold hover:opacity-90 transition-all shadow-md hover:shadow-orange-200"
+                onClick={() => { onClose(); navigate('/login'); }}
+                className="flex-1 py-3 fest-gradient text-white rounded-2xl font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-2 text-sm"
               >
-                <LogIn size={18} />
-                Login to Your Account
+                <LogIn size={15} /> Login
               </button>
               <button
-                onClick={handleRegister}
-                className="flex items-center justify-center gap-2 w-full py-3.5 bg-orange-50 text-orange-600 rounded-2xl font-bold border-2 border-orange-200 hover:bg-orange-100 transition-all"
+                onClick={() => { onClose(); navigate('/register'); }}
+                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-2xl font-semibold hover:bg-gray-200 transition-all flex items-center justify-center gap-2 text-sm"
               >
-                <UserPlus size={18} />
-                Create New Account
-              </button>
-              <button
-                onClick={onClose}
-                className="text-center text-sm text-gray-400 hover:text-gray-600 transition-colors mt-1"
-              >
-                Continue browsing
+                <UserPlus size={15} /> Register
               </button>
             </div>
           </motion.div>

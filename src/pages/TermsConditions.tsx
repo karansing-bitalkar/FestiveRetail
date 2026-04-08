@@ -1,41 +1,37 @@
 import { motion } from 'framer-motion';
 import { FileText } from 'lucide-react';
 
-const SECTIONS = [
-  { title: '1. Acceptance of Terms', content: 'By accessing and using FestiveRetail\'s platform, mobile application, and services, you agree to be bound by these Terms & Conditions. If you do not agree to these terms, please do not use our services. These terms apply to all visitors, users, customers, vendors, and all others who access or use our services.' },
-  { title: '2. Account Registration', content: 'To use certain features of FestiveRetail, you must register for an account. You agree to: Provide accurate, current, and complete information during registration, maintain and promptly update your account information, keep your password confidential and secure, notify us immediately of any unauthorized use of your account, accept responsibility for all activities that occur under your account, and not create accounts for other people without their consent.' },
-  { title: '3. Products and Services', content: 'FestiveRetail acts as a marketplace connecting buyers and vendors. We make reasonable efforts to ensure product information is accurate, but: Product colors may vary due to screen settings, product descriptions are provided by vendors, prices are subject to change without prior notice, product availability is not guaranteed, and combo bundles are subject to component availability.' },
-  { title: '4. Ordering and Payment', content: 'When you place an order on FestiveRetail: You enter into a contract with the vendor, not FestiveRetail, payment is processed securely through our payment partners, orders are confirmed only upon successful payment, FestiveRetail charges a platform fee from vendors (not customers), all prices are inclusive of applicable GST, and receipt of payment confirmation does not guarantee product availability.' },
-  { title: '5. Vendor Terms', content: 'Vendors on FestiveRetail must: Provide accurate product information and images, maintain adequate inventory to fulfill orders, ship products within the committed timeframe, respond to customer queries within 24 hours, maintain product quality as described, comply with all applicable laws and regulations, and not engage in deceptive pricing or practices.' },
-  { title: '6. Intellectual Property', content: 'All content on FestiveRetail, including but not limited to logos, product images, written content, design elements, and software, is the property of FestiveRetail or its content suppliers. You may not reproduce, distribute, modify, or create derivative works without express written permission.' },
-  { title: '7. Limitation of Liability', content: 'FestiveRetail shall not be liable for: Indirect, incidental, or consequential damages, loss of profits or business opportunities, vendor delays or product issues beyond our control, third-party service failures, force majeure events including natural disasters and pandemics, and unauthorized account access due to user negligence. Our maximum liability shall not exceed the order value.' },
-  { title: '8. Governing Law', content: 'These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Pune, Maharashtra. We encourage resolution through our internal dispute resolution process before pursuing legal action. Consumer disputes may be addressed through the National Consumer Dispute Redressal Commission (NCDRC).' },
-];
-
 export default function TermsConditions() {
   return (
-    <div>
-      <section className="py-16 fest-gradient-dark text-white text-center">
-        <div className="max-w-3xl mx-auto px-4">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4"><FileText size={26} /></div>
-            <h1 className="text-4xl font-black mb-3">Terms & Conditions</h1>
-            <p className="text-gray-400">Last updated: October 2024 · Effective immediately</p>
-            <p className="text-gray-300 mt-3 text-lg">Please read these terms carefully before using FestiveRetail's services.</p>
-          </motion.div>
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-12 h-12 fest-gradient rounded-2xl flex items-center justify-center">
+            <FileText size={22} className="text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-black text-gray-900">Terms & Conditions</h1>
+            <p className="text-gray-500 text-sm">Last updated: November 2024</p>
+          </div>
         </div>
-      </section>
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="flex flex-col gap-8">
-          {SECTIONS.map((s, i) => (
-            <motion.div key={s.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-              className="bg-white rounded-2xl p-7 shadow-sm border border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900 mb-3">{s.title}</h2>
-              <p className="text-gray-600 leading-relaxed">{s.content}</p>
-            </motion.div>
+        <div className="space-y-6 text-sm text-gray-600 leading-relaxed">
+          {[
+            { title: '1. Acceptance of Terms', body: 'By accessing and using FestiveRetail, you accept and agree to be bound by the terms and provisions of this agreement.' },
+            { title: '2. Use of Platform', body: 'You agree to use FestiveRetail only for lawful purposes and in a manner that does not infringe the rights of others or restrict their use and enjoyment of the platform.' },
+            { title: '3. Account Registration', body: 'To access certain features, you must register for an account. You are responsible for maintaining the confidentiality of your account credentials.' },
+            { title: '4. Products and Pricing', body: 'All prices are in Indian Rupees (INR). We reserve the right to modify prices at any time. Product descriptions are provided by vendors and we do not guarantee their accuracy.' },
+            { title: '5. Orders and Payment', body: 'By placing an order, you confirm that you are authorized to use the payment method. All transactions are processed securely through our payment gateway partners.' },
+            { title: '6. Intellectual Property', body: 'All content on FestiveRetail, including text, graphics, logos, and images, is the property of FestiveRetail and protected by applicable intellectual property laws.' },
+            { title: '7. Limitation of Liability', body: 'FestiveRetail shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the platform.' },
+            { title: '8. Governing Law', body: 'These Terms shall be governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of courts in Pune, Maharashtra.' },
+          ].map(s => (
+            <div key={s.title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+              <h2 className="text-base font-black text-gray-900 mb-3">{s.title}</h2>
+              <p>{s.body}</p>
+            </div>
           ))}
         </div>
-      </section>
+      </motion.div>
     </div>
   );
 }

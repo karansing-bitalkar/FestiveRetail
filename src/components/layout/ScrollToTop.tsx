@@ -1,27 +1,25 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
-import { useScrollTop } from '@/hooks/useScrollTop';
 
 export default function ScrollToTop() {
-  useScrollTop();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setVisible(window.scrollY > 300);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setVisible(window.scrollY > 400);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.5, y: 20 }}
+          exit={{ opacity: 0, scale: 0.8, y: 20 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 fest-gradient rounded-full flex items-center justify-center text-white shadow-lg hover:opacity-90 transition-all glow-orange"
+          className="fixed bottom-6 right-6 z-40 w-12 h-12 fest-gradient text-white rounded-2xl flex items-center justify-center shadow-lg hover:opacity-90 hover:scale-105 transition-all"
           aria-label="Scroll to top"
         >
           <ArrowUp size={20} />

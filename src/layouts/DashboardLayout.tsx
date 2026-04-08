@@ -1,233 +1,195 @@
 import { useState } from 'react';
-import { NavLink, useNavigate, Outlet } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  LayoutDashboard, ShoppingBag, Heart, ShoppingCart,
-  MapPin, User, Bell, Package, DollarSign,
-  Users, Store, Tag, BarChart3, Settings, LogOut,
-  ChevronLeft, ChevronRight, ShieldCheck, Truck, Sparkles
-} from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import LogoutModal from '@/components/features/LogoutModal';
-import ScrollToTop from '@/components/layout/ScrollToTop';
-import { Role } from '@/types';
+import {
+  LayoutDashboard, ShoppingBag, Heart, ShoppingCart, MapPin, User, Bell,
+  Package, TrendingUp, BarChart3, Settings, Users, Store, Shield, Menu, X,
+  ChevronRight, Sparkles, LogOut
+} from 'lucide-react';
 
-const MENUS: Record<Role, { icon: React.ElementType; label: string; path: string }[]> = {
-  customer: [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard/customer' },
-    { icon: ShoppingBag, label: 'My Orders', path: '/dashboard/customer/orders' },
-    { icon: Heart, label: 'Wishlist', path: '/dashboard/customer/wishlist' },
-    { icon: ShoppingCart, label: 'Cart', path: '/dashboard/customer/cart' },
-    { icon: MapPin, label: 'Addresses', path: '/dashboard/customer/addresses' },
-    { icon: User, label: 'Profile', path: '/dashboard/customer/profile' },
-    { icon: Bell, label: 'Notifications', path: '/dashboard/customer/notifications' },
-  ],
-  vendor: [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard/vendor' },
-    { icon: Tag, label: 'Products', path: '/dashboard/vendor/products' },
-    { icon: Truck, label: 'Orders', path: '/dashboard/vendor/orders' },
-    { icon: Package, label: 'Inventory', path: '/dashboard/vendor/inventory' },
-    { icon: DollarSign, label: 'Earnings', path: '/dashboard/vendor/earnings' },
-    { icon: User, label: 'Profile', path: '/dashboard/vendor/profile' },
-  ],
-  admin: [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard/admin' },
-    { icon: Users, label: 'Users', path: '/dashboard/admin/users' },
-    { icon: Store, label: 'Vendors', path: '/dashboard/admin/vendors' },
-    { icon: ShieldCheck, label: 'Moderation', path: '/dashboard/admin/moderation' },
-    { icon: Tag, label: 'Products', path: '/dashboard/admin/products' },
-    { icon: Truck, label: 'Orders', path: '/dashboard/admin/orders' },
-    { icon: BarChart3, label: 'Analytics', path: '/dashboard/admin/analytics' },
-    { icon: Settings, label: 'Settings', path: '/dashboard/admin/settings' },
-  ],
-};
+const CUSTOMER_MENU = [
+  { label: 'Dashboard', path: '', icon: LayoutDashboard },
+  { label: 'My Orders', path: 'orders', icon: ShoppingBag },
+  { label: 'Wishlist', path: 'wishlist', icon: Heart },
+  { label: 'Cart', path: 'cart', icon: ShoppingCart },
+  { label: 'Addresses', path: 'addresses', icon: MapPin },
+  { label: 'Profile', path: 'profile', icon: User },
+  { label: 'Notifications', path: 'notifications', icon: Bell },
+];
 
-const ROLE_LABELS: Record<Role, string> = {
-  customer: 'Buyer Account',
-  vendor: 'Seller Account',
-  admin: 'Admin Panel',
-};
+const VENDOR_MENU = [
+  { label: 'Dashboard', path: '', icon: LayoutDashboard },
+  { label: 'Products', path: 'products', icon: Package },
+  { label: 'Orders', path: 'orders', icon: ShoppingBag },
+  { label: 'Inventory', path: 'inventory', icon: BarChart3 },
+  { label: 'Earnings', path: 'earnings', icon: TrendingUp },
+  { label: 'Profile', path: 'profile', icon: User },
+];
 
-const ROLE_GRADIENTS: Record<Role, string> = {
-  customer: 'from-orange-500 to-pink-500',
-  vendor: 'from-purple-500 to-blue-500',
-  admin: 'from-red-500 to-orange-500',
-};
-
-const ROLE_ACTIVE_BG: Record<Role, string> = {
-  customer: 'bg-orange-500/20 text-orange-400',
-  vendor: 'bg-purple-500/20 text-purple-400',
-  admin: 'bg-red-500/20 text-red-400',
-};
+const ADMIN_MENU = [
+  { label: 'Dashboard', path: '', icon: LayoutDashboard },
+  { label: 'Users', path: 'users', icon: Users },
+  { label: 'Vendors', path: 'vendors', icon: Store },
+  { label: 'Product Moderation', path: 'moderation', icon: Shield },
+  { label: 'Products', path: 'products', icon: Package },
+  { label: 'Orders', path: 'orders', icon: ShoppingBag },
+  { label: 'Analytics', path: 'analytics', icon: BarChart3 },
+  { label: 'Settings', path: 'settings', icon: Settings },
+];
 
 export default function DashboardLayout() {
-  const [collapsed, setCollapsed] = useState(false);
-  const [logoutOpen, setLogoutOpen] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const role = (user?.role ?? 'customer') as Role;
-  const menus = MENUS[role];
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [logoutModal, setLogoutModal] = useState(false);
+
+  const role = user?.role || 'customer';
+  const menu = role === 'admin' ? ADMIN_MENU : role === 'vendor' ? VENDOR_MENU : CUSTOMER_MENU;
+  const basePath = `/dashboard/${role}`;
+
+  const isActive = (path: string) => {
+    const full = path ? `${basePath}/${path}` : basePath;
+    return path === '' ? location.pathname === basePath : location.pathname === full;
+  };
 
   const handleLogout = () => {
     logout();
     navigate('/home');
   };
 
+  const roleColors = {
+    admin: 'text-purple-300',
+    vendor: 'text-blue-300',
+    customer: 'text-orange-300',
+  };
+
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
-      {/* ── Sidebar ── */}
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
       <motion.aside
-        animate={{ width: collapsed ? 72 : 260 }}
+        animate={{ width: sidebarOpen ? 256 : 72 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="flex-shrink-0 h-full flex flex-col overflow-hidden relative z-10"
-        style={{
-          background: 'linear-gradient(180deg, #0d0e1a 0%, #111328 100%)',
-          boxShadow: '4px 0 24px rgba(0,0,0,0.35)',
-        }}
+        className="flex-shrink-0 bg-gray-900 flex flex-col overflow-hidden fixed left-0 top-0 bottom-0 z-30"
       >
         {/* Logo area */}
-        <div className={`flex items-center gap-3 px-4 py-5 border-b border-white/8 flex-shrink-0 ${collapsed ? 'justify-center' : ''}`}>
-          <div className={`w-9 h-9 flex-shrink-0 bg-gradient-to-br ${ROLE_GRADIENTS[role]} rounded-xl flex items-center justify-center shadow-lg`}>
-            <Sparkles size={17} className="text-white" />
+        <div className="flex items-center gap-3 px-4 py-5 border-b border-gray-800 min-h-[72px]">
+          <div className="w-9 h-9 fest-gradient rounded-xl flex items-center justify-center flex-shrink-0">
+            <Sparkles size={16} className="text-white" />
           </div>
           <AnimatePresence>
-            {!collapsed && (
-              <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                <div className="text-white font-black text-base leading-tight whitespace-nowrap">FestiveRetail</div>
-                <div className={`text-xs font-semibold bg-gradient-to-r ${ROLE_GRADIENTS[role]} bg-clip-text text-transparent whitespace-nowrap`}>
-                  {ROLE_LABELS[role]}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Collapse toggle */}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className={`absolute -right-3 top-[68px] w-6 h-6 bg-gradient-to-br ${ROLE_GRADIENTS[role]} rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform z-20`}>
-          {collapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
-        </button>
-
-        {/* User card */}
-        <div className={`flex items-center gap-3 px-4 py-4 border-b border-white/8 flex-shrink-0 ${collapsed ? 'justify-center' : ''}`}>
-          <div className={`w-9 h-9 flex-shrink-0 rounded-xl bg-gradient-to-br ${ROLE_GRADIENTS[role]} flex items-center justify-center text-white font-black text-sm shadow-md`}>
-            {user?.name?.charAt(0)?.toUpperCase() ?? 'U'}
-          </div>
-          <AnimatePresence>
-            {!collapsed && (
+            {sidebarOpen && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="overflow-hidden">
-                <div className="text-white text-sm font-semibold truncate max-w-[140px]">{user?.name}</div>
-                <div className="text-gray-400 text-xs truncate max-w-[140px]">{user?.email}</div>
+                <span className="font-black text-white text-base whitespace-nowrap">FestiveRetail</span>
+                <p className={`text-xs capitalize font-medium ${roleColors[role]}`}>{role} Panel</p>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Nav links */}
-        <nav className="flex-1 py-3 px-2 overflow-y-auto scrollbar-hide">
-          {!collapsed && (
-            <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest px-3 mb-2">Navigation</p>
-          )}
-          <div className="flex flex-col gap-0.5">
-            {menus.map(item => {
-              const Icon = item.icon;
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  end={item.path === `/dashboard/${role}`}
-                  title={collapsed ? item.label : undefined}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group ${
-                      isActive
-                        ? `${ROLE_ACTIVE_BG[role]} font-semibold`
-                        : 'text-gray-400 hover:text-white hover:bg-white/8'
-                    } ${collapsed ? 'justify-center px-0' : ''}`
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      <Icon size={18} className={`flex-shrink-0 transition-transform group-hover:scale-105 ${isActive ? '' : ''}`} />
-                      <AnimatePresence>
-                        {!collapsed && (
-                          <motion.span
-                            initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -8 }} transition={{ duration: 0.15 }}
-                            className="text-sm font-medium whitespace-nowrap"
-                          >
-                            {item.label}
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
-                      {/* Active indicator */}
-                      {isActive && !collapsed && (
-                        <motion.div layoutId="activeIndicator" className={`ml-auto w-1.5 h-1.5 rounded-full bg-gradient-to-br ${ROLE_GRADIENTS[role]}`} />
-                      )}
-                    </>
+        {/* Nav menu */}
+        <nav className="flex-1 py-4 px-2 flex flex-col gap-1 overflow-y-auto scrollbar-hide">
+          {menu.map((item) => {
+            const active = isActive(item.path);
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.path}
+                to={item.path ? `${basePath}/${item.path}` : basePath}
+                className={`flex items-center gap-3 px-3 py-3 rounded-xl cursor-pointer transition-all duration-200 group relative ${
+                  active
+                    ? 'bg-gradient-to-r from-orange-500/20 to-pink-500/10 text-orange-400 border-l-[3px] border-orange-500'
+                    : 'text-gray-400 hover:bg-gray-800 hover:text-orange-400'
+                }`}
+              >
+                <Icon size={19} className="flex-shrink-0" />
+                <AnimatePresence>
+                  {sidebarOpen && (
+                    <motion.span
+                      initial={{ opacity: 0, x: -5 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="text-sm font-semibold whitespace-nowrap overflow-hidden"
+                    >
+                      {item.label}
+                    </motion.span>
                   )}
-                </NavLink>
-              );
-            })}
-          </div>
+                </AnimatePresence>
+                {active && sidebarOpen && (
+                  <ChevronRight size={14} className="ml-auto text-orange-400 flex-shrink-0" />
+                )}
+                {!sidebarOpen && (
+                  <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-gray-800 text-white text-xs rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-xl">
+                    {item.label}
+                  </div>
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Logout */}
-        <div className="p-2 border-t border-white/8 flex-shrink-0">
-          <button
-            onClick={() => setLogoutOpen(true)}
-            title={collapsed ? 'Logout' : undefined}
-            className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all ${collapsed ? 'justify-center px-0' : ''}`}>
-            <LogOut size={18} className="flex-shrink-0" />
-            <AnimatePresence>
-              {!collapsed && (
-                <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-sm font-medium">
-                  Logout
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
+        {/* User + logout */}
+        <div className="border-t border-gray-800 p-3">
+          {sidebarOpen ? (
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 fest-gradient rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                {user?.name.charAt(0)}
+              </div>
+              <div className="flex-1 overflow-hidden">
+                <p className="text-sm font-semibold text-white truncate">{user?.name}</p>
+                <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+              </div>
+              <button
+                onClick={() => setLogoutModal(true)}
+                className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-400 hover:bg-gray-800 transition-all flex-shrink-0"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setLogoutModal(true)}
+              className="w-full flex items-center justify-center py-2.5 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-xl transition-all"
+            >
+              <LogOut size={18} />
+            </button>
+          )}
         </div>
       </motion.aside>
 
-      {/* ── Main Content ── */}
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+      {/* Main content */}
+      <div
+        className="flex-1 flex flex-col min-w-0 transition-all duration-300"
+        style={{ marginLeft: sidebarOpen ? 256 : 72 }}
+      >
         {/* Top bar */}
-        <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between flex-shrink-0 shadow-sm">
-          <div>
-            <h1 className="text-lg font-bold text-gray-900">
-              Welcome back, <span className={`bg-gradient-to-r ${ROLE_GRADIENTS[role]} bg-clip-text text-transparent`}>{user?.name?.split(' ')[0]}!</span>
-            </h1>
-            <p className="text-sm text-gray-400">
-              {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
+        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center gap-4 sticky top-0 z-20">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-100 text-gray-600 transition-all flex-shrink-0"
+          >
+            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+          <div className="flex-1">
+            <h2 className="font-bold text-gray-900 text-sm">
+              {menu.find((m) => isActive(m.path))?.label || 'Dashboard'}
+            </h2>
+            <p className="text-xs text-gray-400 capitalize">{role} · {user?.name}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <NavLink to={`/dashboard/${role}/notifications`}
-              className="w-9 h-9 flex items-center justify-center rounded-xl bg-orange-50 text-orange-500 hover:bg-orange-100 transition-all relative">
-              <Bell size={17} />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center font-black">2</span>
-            </NavLink>
-            <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${ROLE_GRADIENTS[role]} flex items-center justify-center text-white font-black text-sm shadow-md`}>
-              {user?.name?.charAt(0)?.toUpperCase()}
-            </div>
-          </div>
+          <Link to="/home" className="text-xs text-orange-500 font-semibold hover:text-orange-600 transition-colors flex items-center gap-1">
+            ← Back to Shop
+          </Link>
         </header>
 
-        {/* Page */}
-        <motion.main
-          key={typeof window !== 'undefined' ? window.location.pathname : ''}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.22 }}
-          className="flex-1 overflow-y-auto p-6"
-        >
+        {/* Page content */}
+        <main className="flex-1 p-6 overflow-auto">
           <Outlet />
-        </motion.main>
+        </main>
       </div>
 
-      <LogoutModal isOpen={logoutOpen} onConfirm={handleLogout} onCancel={() => setLogoutOpen(false)} />
-      <ScrollToTop />
+      <LogoutModal isOpen={logoutModal} onConfirm={handleLogout} onCancel={() => setLogoutModal(false)} />
     </div>
   );
 }

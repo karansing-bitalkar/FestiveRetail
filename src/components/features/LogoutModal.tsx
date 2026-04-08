@@ -1,13 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, LogOut } from 'lucide-react';
+import { LogOut, X } from 'lucide-react';
 
-interface LogoutModalProps {
+interface Props {
   isOpen: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
-export default function LogoutModal({ isOpen, onConfirm, onCancel }: LogoutModalProps) {
+export default function LogoutModal({ isOpen, onConfirm, onCancel }: Props) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -15,48 +15,32 @@ export default function LogoutModal({ isOpen, onConfirm, onCancel }: LogoutModal
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-          onClick={onCancel}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
         >
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
           <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: 'spring', damping: 25 }}
-            onClick={e => e.stopPropagation()}
-            className="relative bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6 text-center"
           >
-            <button
-              onClick={onCancel}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all"
-            >
-              <X size={16} />
-            </button>
-
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
-                <LogOut size={26} className="text-red-500" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Confirm Logout</h3>
-              <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-                Are you sure you want to logout from FestiveRetail? You'll need to login again to access your account.
-              </p>
-              <div className="flex gap-3 w-full">
-                <button
-                  onClick={onCancel}
-                  className="flex-1 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all"
-                >
-                  Stay Logged In
-                </button>
-                <button
-                  onClick={onConfirm}
-                  className="flex-1 py-3 bg-red-500 text-white rounded-xl font-semibold hover:bg-red-600 transition-all flex items-center justify-center gap-2"
-                >
-                  <LogOut size={16} />
-                  Logout
-                </button>
-              </div>
+            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <LogOut size={28} className="text-orange-500" />
+            </div>
+            <h3 className="text-xl font-black text-gray-900 mb-2">Sign Out?</h3>
+            <p className="text-gray-500 text-sm mb-6">Are you sure you want to sign out of your FestiveRetail account?</p>
+            <div className="flex gap-3">
+              <button
+                onClick={onCancel}
+                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-2xl font-semibold hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+              >
+                <X size={15} /> Cancel
+              </button>
+              <button
+                onClick={onConfirm}
+                className="flex-1 py-3 fest-gradient text-white rounded-2xl font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-2"
+              >
+                <LogOut size={15} /> Sign Out
+              </button>
             </div>
           </motion.div>
         </motion.div>

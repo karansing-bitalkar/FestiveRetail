@@ -1,108 +1,127 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Heart, Star, Eye, Sparkles } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
 import { Product } from '@/types';
 import { useAuth } from '@/hooks/useAuth';
 import AuthGuardModal from './AuthGuardModal';
-import { toast } from 'sonner';
 
-interface ProductCardProps {
+interface Props {
   product: Product;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product }: Props) {
   const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const [authModal, setAuthModal] = useState(false);
-  const [authAction, setAuthAction] = useState('continue');
-  const [wishlisted, setWishlisted] = useState(false);
+  const [authGuard, setAuthGuard] = useState(false);
+  const [wishlisted, setWishlisted] = useState(() => {
+    const wl = JSON.parse(localStorage.getItem('festive_wishlist') || '[]');
+    return wl.includes(product.id);
+  });
+  const [addedToCart, setAddedToCart] = useState(false);
 
   const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
 
-  const guardedAction = (action: string, callback: () => void) => {
-    if (!isAuthenticated) {
-      setAuthAction(action);
-      setAuthModal(true);
-      return;
-    }
-    callback();
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isAuthenticated) { setAuthGuard(true); return; }
+    const wl: string[] = JSON.parse(localStorage.getItem('festive_wishlist') || '[]');
+    const updated = wishlisted ? wl.filter((id) => id !== product.id) : [...wl, product.id];
+    localStorage.setItem('festive_wishlist', JSON.stringify(updated));
+    setWishlisted(!wishlisted);
+    window.dispatchEvent(new Event('wishlist-updated'));
   };
 
-  const handleAddToCart = () => guardedAction('add to cart', () => {
-    toast.success(`${product.name} added to cart!`, { description: `₹${product.price.toLocaleString()} × 1` });
-  });
-
-  const handleWishlist = () => guardedAction('add to wishlist', () => {
-    setWishlisted(!wishlisted);
-    toast.success(wishlisted ? 'Removed from wishlist' : 'Added to wishlist!');
-  });
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!isAuthenticated) { setAuthGuard(true); return; }
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 1500);
+  };
 
   return (
     <>
       <motion.div
-        whileHover={{ y: -4 }}
-        className="bg-white rounded-2xl overflow-hidden shadow-sm border border-orange-50 hover:shadow-xl hover:shadow-orange-100 transition-shadow duration-300 group"
+        whileHover={{ y: -5 }}
+        transition={{ duration: 0.2 }}
+        className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-orange-200 transition-all duration-300 flex flex-col"
       >
-        <div className="relative overflow-hidden aspect-square">
+        <Link to={`/product/${product.id}`} className="block relative overflow-hidden aspect-square">
           <img
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
           />
+          {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
             {discount > 0 && (
-              <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg">-{discount}%</span>
+              <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                -{discount}%
+              </span>
             )}
             {product.isCombo && (
-              <span className="fest-gradient text-white text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1">
-                <Sparkles size={10} /> COMBO
+              <span className="fest-gradient text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                <Sparkles size={8} /> Combo
               </span>
             )}
           </div>
-          {/* Wishlist + View */}
-          <div className="absolute top-3 right-3 flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          {/* Actions */}
+          <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-2 group-hover:translate-x-0">
             <button
               onClick={handleWishlist}
-              className={`w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center transition-all shadow-md ${wishlisted ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
+              className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-md transition-all ${wishlisted ? 'bg-red-500 text-white' : 'bg-white text-gray-500 hover:text-red-500'}`}
             >
-              <Heart size={14} className={wishlisted ? 'fill-red-500' : ''} />
+              <Heart size={15} fill={wishlisted ? 'currentColor' : 'none'} />
             </button>
-            <Link to={`/product/${product.id}`}
-              className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-orange-500 transition-all shadow-md"
+            <Link
+              to={`/product/${product.id}`}
+              className="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-md text-gray-500 hover:text-orange-500 transition-colors"
             >
-              <Eye size={14} />
+              <Eye size={15} />
             </Link>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-            <button
-              onClick={handleAddToCart}
-              className="w-full py-2.5 fest-gradient text-white rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shadow-lg"
-            >
-              <ShoppingCart size={15} /> Add to Cart
-            </button>
-          </div>
-        </div>
-        <div className="p-4">
-          <div className="flex items-center gap-1 mb-1">
-            <span className="text-xs text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full font-medium">{product.festival}</span>
-          </div>
+        </Link>
+
+        <div className="p-4 flex flex-col flex-1">
+          <div className="text-xs text-orange-500 font-semibold mb-1">{product.festival}</div>
           <Link to={`/product/${product.id}`}>
-            <h3 className="font-semibold text-gray-900 text-sm leading-tight mb-2 line-clamp-2 hover:text-orange-500 transition-colors">{product.name}</h3>
+            <h3 className="font-bold text-gray-900 text-sm mb-2 line-clamp-2 hover:text-orange-500 transition-colors leading-snug">
+              {product.name}
+            </h3>
           </Link>
-          <div className="flex items-center gap-1 mb-2">
-            <Star size={12} className="text-yellow-400 fill-yellow-400" />
-            <span className="text-xs font-semibold text-gray-700">{product.rating || '4.5'}</span>
-            <span className="text-xs text-gray-400">({product.reviews || 0})</span>
+          <div className="flex items-center gap-1.5 mb-3">
+            <div className="flex">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} size={11} className={i < Math.floor(product.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 fill-gray-200'} />
+              ))}
+            </div>
+            <span className="text-xs text-gray-400">({product.reviews})</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-orange-500">₹{product.price.toLocaleString()}</span>
-            <span className="text-sm text-gray-400 line-through">₹{product.originalPrice.toLocaleString()}</span>
+          <div className="flex items-center gap-2 mb-3 mt-auto">
+            <span className="text-lg font-black text-orange-500">₹{product.price.toLocaleString()}</span>
+            {product.originalPrice > product.price && (
+              <span className="text-xs text-gray-400 line-through">₹{product.originalPrice.toLocaleString()}</span>
+            )}
           </div>
+          <button
+            onClick={handleAddToCart}
+            className={`w-full py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all ${
+              addedToCart
+                ? 'bg-green-500 text-white'
+                : 'fest-gradient text-white hover:opacity-90'
+            }`}
+          >
+            <ShoppingCart size={14} />
+            {addedToCart ? 'Added!' : 'Add to Cart'}
+          </button>
         </div>
       </motion.div>
 
-      <AuthGuardModal isOpen={authModal} onClose={() => setAuthModal(false)} action={authAction} />
+      <AuthGuardModal
+        isOpen={authGuard}
+        onClose={() => setAuthGuard(false)}
+        message="Please login to add items to cart or wishlist."
+      />
     </>
   );
 }
