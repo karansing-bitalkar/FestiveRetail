@@ -1,21 +1,15 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiTrash2, FiPlus, FiChevronLeft, FiChevronRight, FiEdit2 } from 'react-icons/fi';
-import { MdBlock, MdCheckCircle, MdPending } from 'react-icons/md';
+import { motion } from 'framer-motion';
+import { Search, Trash2, Plus, ChevronLeft, ChevronRight, CheckCircle, Ban, ShieldCheck } from 'lucide-react';
 import ConfirmModal from '@/components/features/ConfirmModal';
 import Modal from '@/components/features/Modal';
 import { toast } from 'sonner';
 
 interface ManagedUser {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
+  id: string; name: string; email: string; password: string;
   role: 'customer' | 'vendor' | 'admin';
   status: 'active' | 'blocked' | 'pending';
-  phone: string;
-  orders: number;
-  joinedAt: string;
+  phone: string; orders: number; joinedAt: string;
 }
 
 const INITIAL_USERS: ManagedUser[] = [
@@ -34,7 +28,6 @@ const INITIAL_USERS: ManagedUser[] = [
 ];
 
 const PAGE_SIZE = 10;
-
 const BLANK_FORM = { name: '', email: '', password: '', role: 'customer' as ManagedUser['role'], phone: '' };
 
 export default function UsersManagement() {
@@ -42,21 +35,14 @@ export default function UsersManagement() {
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [page, setPage] = useState(1);
-
-  // Modals
   const [addModal, setAddModal] = useState(false);
   const [form, setForm] = useState(BLANK_FORM);
   const [formError, setFormError] = useState('');
-
-  // Confirm modals
   const [pendingAction, setPendingAction] = useState<{ type: 'approve' | 'block' | 'unblock' | 'delete'; userId: string } | null>(null);
 
-  // Persist to localStorage so login hook can read new users
-  useEffect(() => {
-    localStorage.setItem('festive_user_store', JSON.stringify(users));
-  }, [users]);
+  useEffect(() => { localStorage.setItem('festive_user_store', JSON.stringify(users)); }, [users]);
 
-  const filtered = users.filter((u) => {
+  const filtered = users.filter(u => {
     if (filterStatus !== 'all' && u.status !== filterStatus) return false;
     if (search && !u.name.toLowerCase().includes(search.toLowerCase()) && !u.email.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
@@ -65,111 +51,73 @@ export default function UsersManagement() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  const handleSearch = (v: string) => { setSearch(v); setPage(1); };
-  const handleFilterStatus = (v: string) => { setFilterStatus(v); setPage(1); };
-
-  // Add user
   const handleAddUser = () => {
     if (!form.name || !form.email || !form.password) { setFormError('Name, email, and password are required.'); return; }
-    if (users.find((u) => u.email === form.email)) { setFormError('Email already exists.'); return; }
-    const newUser: ManagedUser = {
-      id: Date.now().toString(),
-      ...form,
-      status: 'active',
-      orders: 0,
-      joinedAt: new Date().toISOString().split('T')[0],
-    };
-    setUsers((us) => [...us, newUser]);
+    if (users.find(u => u.email === form.email)) { setFormError('Email already exists.'); return; }
+    const newUser: ManagedUser = { id: Date.now().toString(), ...form, status: 'active', orders: 0, joinedAt: new Date().toISOString().split('T')[0] };
+    setUsers(us => [...us, newUser]);
     toast.success(`User "${form.name}" added! They can now login.`);
-    setAddModal(false);
-    setForm(BLANK_FORM);
-    setFormError('');
+    setAddModal(false); setForm(BLANK_FORM); setFormError('');
   };
 
-  // Confirm action
   const executeAction = () => {
     if (!pendingAction) return;
     const { type, userId } = pendingAction;
-    if (type === 'delete') {
-      setUsers((us) => us.filter((u) => u.id !== userId));
-      toast.success('User deleted successfully.');
-    } else if (type === 'approve') {
-      setUsers((us) => us.map((u) => u.id === userId ? { ...u, status: 'active' } : u));
-      toast.success('User approved successfully.');
-    } else if (type === 'block') {
-      setUsers((us) => us.map((u) => u.id === userId ? { ...u, status: 'blocked' } : u));
-      toast.success('User blocked.');
-    } else if (type === 'unblock') {
-      setUsers((us) => us.map((u) => u.id === userId ? { ...u, status: 'active' } : u));
-      toast.success('User unblocked.');
-    }
+    if (type === 'delete') { setUsers(us => us.filter(u => u.id !== userId)); toast.success('User deleted.'); }
+    else if (type === 'approve') { setUsers(us => us.map(u => u.id === userId ? { ...u, status: 'active' } : u)); toast.success('User approved!'); }
+    else if (type === 'block') { setUsers(us => us.map(u => u.id === userId ? { ...u, status: 'blocked' } : u)); toast.success('User blocked.'); }
+    else if (type === 'unblock') { setUsers(us => us.map(u => u.id === userId ? { ...u, status: 'active' } : u)); toast.success('User unblocked!'); }
     setPendingAction(null);
   };
 
-  const confirmMessages: Record<string, string> = {
-    approve: 'Approve this user account? They will be able to login.',
+  const actionLabels = { approve: 'Approve User', block: 'Block User', unblock: 'Unblock User', delete: 'Delete User' };
+  const actionMessages = {
+    approve: 'Approve this user? They will be able to login.',
     block: 'Block this user? They will not be able to login.',
     unblock: 'Unblock this user? They will regain access.',
     delete: 'Permanently delete this user? This action cannot be undone.',
   };
 
-  const confirmBtnTexts: Record<string, string> = {
-    approve: 'Approve User',
-    block: 'Block User',
-    unblock: 'Unblock User',
-    delete: 'Delete User',
-  };
-
   return (
     <div className="flex flex-col gap-6">
-      {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h2 className="text-2xl font-black text-gray-900 mb-1">Users Management</h2>
-          <p className="text-gray-500 text-sm">{users.length} total users · {users.filter((u) => u.status === 'pending').length} pending</p>
+          <p className="text-gray-500 text-sm">{users.length} total users · {users.filter(u => u.status === 'pending').length} pending</p>
         </div>
-        <button
-          onClick={() => { setForm(BLANK_FORM); setFormError(''); setAddModal(true); }}
-          className="flex items-center gap-2 px-5 py-2.5 fest-gradient text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-md"
-        >
-          <FiPlus /> Add User
+        <button onClick={() => { setForm(BLANK_FORM); setFormError(''); setAddModal(true); }}
+          className="flex items-center gap-2 px-5 py-2.5 fest-gradient text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-md">
+          <Plus size={15} /> Add User
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { l: 'Total', v: users.length, color: 'bg-blue-50 text-blue-700' },
-          { l: 'Active', v: users.filter((u) => u.status === 'active').length, color: 'bg-green-50 text-green-700' },
-          { l: 'Pending', v: users.filter((u) => u.status === 'pending').length, color: 'bg-yellow-50 text-yellow-700' },
-          { l: 'Blocked', v: users.filter((u) => u.status === 'blocked').length, color: 'bg-red-50 text-red-700' },
-        ].map((s) => (
-          <div key={s.l} className={`${s.color} rounded-2xl p-4 text-center`}>
+          { l: 'Total', v: users.length, c: 'bg-blue-50 text-blue-700' },
+          { l: 'Active', v: users.filter(u => u.status === 'active').length, c: 'bg-green-50 text-green-700' },
+          { l: 'Pending', v: users.filter(u => u.status === 'pending').length, c: 'bg-yellow-50 text-yellow-700' },
+          { l: 'Blocked', v: users.filter(u => u.status === 'blocked').length, c: 'bg-red-50 text-red-700' },
+        ].map(s => (
+          <div key={s.l} className={`${s.c} rounded-2xl p-4 text-center`}>
             <div className="text-3xl font-black mb-0.5">{s.v}</div>
             <div className="text-sm font-medium">{s.l}</div>
           </div>
         ))}
       </div>
 
-      {/* Search + filter */}
+      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search users by name or email..."
-            value={search}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm"
-          />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
+          <input type="text" placeholder="Search users by name or email..." value={search}
+            onChange={e => { setSearch(e.target.value); setPage(1); }}
+            className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm bg-white" />
         </div>
         <div className="flex gap-2">
-          {['all', 'active', 'pending', 'blocked'].map((s) => (
-            <button
-              key={s}
-              onClick={() => handleFilterStatus(s)}
-              className={`px-4 py-2.5 rounded-xl text-sm font-medium capitalize transition-all border ${filterStatus === s ? 'fest-gradient text-white border-transparent' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300'}`}
-            >
+          {['all', 'active', 'pending', 'blocked'].map(s => (
+            <button key={s} onClick={() => { setFilterStatus(s); setPage(1); }}
+              className={`px-4 py-2.5 rounded-xl text-sm font-semibold capitalize transition-all border ${filterStatus === s ? 'fest-gradient text-white border-transparent' : 'bg-white text-gray-600 border-gray-200 hover:border-orange-300'}`}>
               {s}
             </button>
           ))}
@@ -181,15 +129,13 @@ export default function UsersManagement() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
-              <tr>
-                {['#', 'User', 'Email', 'Role', 'Phone', 'Orders', 'Joined', 'Status', 'Actions'].map((h) => (
-                  <th key={h} className="px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase whitespace-nowrap">{h}</th>
-                ))}
-              </tr>
+              <tr>{['#', 'User', 'Email', 'Role', 'Phone', 'Orders', 'Joined', 'Status', 'Actions'].map(h => (
+                <th key={h} className="px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase whitespace-nowrap">{h}</th>
+              ))}</tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
               {paginated.length === 0 ? (
-                <tr><td colSpan={9} className="px-5 py-12 text-center text-gray-400 text-sm">No users found</td></tr>
+                <tr><td colSpan={9} className="px-5 py-12 text-center text-gray-400">No users found</td></tr>
               ) : paginated.map((u, i) => (
                 <motion.tr key={u.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }} className="hover:bg-orange-50/30 transition-colors">
                   <td className="px-5 py-4 text-xs text-gray-400">{(page - 1) * PAGE_SIZE + i + 1}</td>
@@ -201,8 +147,8 @@ export default function UsersManagement() {
                   </td>
                   <td className="px-5 py-4 text-sm text-gray-600">{u.email}</td>
                   <td className="px-5 py-4">
-                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full capitalize ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : u.role === 'vendor' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'}`}>
-                      {u.role}
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full capitalize flex items-center gap-1 w-fit ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : u.role === 'vendor' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'}`}>
+                      {u.role === 'admin' && <ShieldCheck size={10} />}{u.role}
                     </span>
                   </td>
                   <td className="px-5 py-4 text-sm text-gray-600 whitespace-nowrap">{u.phone}</td>
@@ -218,24 +164,24 @@ export default function UsersManagement() {
                       {u.status === 'pending' && (
                         <button onClick={() => setPendingAction({ type: 'approve', userId: u.id })}
                           className="p-1.5 bg-green-50 text-green-500 rounded-lg hover:bg-green-100 transition-all" title="Approve">
-                          <MdCheckCircle className="text-sm" />
+                          <CheckCircle size={14} />
                         </button>
                       )}
                       {u.status === 'active' && (
                         <button onClick={() => setPendingAction({ type: 'block', userId: u.id })}
                           className="p-1.5 bg-red-50 text-red-400 rounded-lg hover:bg-red-100 transition-all" title="Block">
-                          <MdBlock className="text-sm" />
+                          <Ban size={14} />
                         </button>
                       )}
                       {u.status === 'blocked' && (
                         <button onClick={() => setPendingAction({ type: 'unblock', userId: u.id })}
                           className="p-1.5 bg-green-50 text-green-500 rounded-lg hover:bg-green-100 transition-all" title="Unblock">
-                          <MdCheckCircle className="text-sm" />
+                          <CheckCircle size={14} />
                         </button>
                       )}
                       <button onClick={() => setPendingAction({ type: 'delete', userId: u.id })}
                         className="p-1.5 bg-gray-50 text-gray-400 rounded-lg hover:bg-red-50 hover:text-red-400 transition-all" title="Delete">
-                        <FiTrash2 className="text-sm" />
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   </td>
@@ -249,21 +195,21 @@ export default function UsersManagement() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} users</p>
+          <p className="text-sm text-gray-500">Showing {Math.min((page - 1) * PAGE_SIZE + 1, filtered.length)}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}</p>
           <div className="flex items-center gap-2">
-            <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}
-              className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 text-gray-600 hover:border-orange-400 hover:text-orange-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
-              <FiChevronLeft />
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+              className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 hover:border-orange-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+              <ChevronLeft size={16} />
             </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
               <button key={p} onClick={() => setPage(p)}
-                className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-medium transition-all ${page === p ? 'fest-gradient text-white' : 'border border-gray-200 text-gray-600 hover:border-orange-400'}`}>
+                className={`w-9 h-9 flex items-center justify-center rounded-xl text-sm font-bold transition-all ${page === p ? 'fest-gradient text-white' : 'border border-gray-200 text-gray-600 hover:border-orange-400'}`}>
                 {p}
               </button>
             ))}
-            <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages}
-              className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 text-gray-600 hover:border-orange-400 hover:text-orange-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
-              <FiChevronRight />
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+              className="w-9 h-9 flex items-center justify-center rounded-xl border border-gray-200 hover:border-orange-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+              <ChevronRight size={16} />
             </button>
           </div>
         </div>
@@ -278,25 +224,17 @@ export default function UsersManagement() {
             { label: 'Email Address', key: 'email', type: 'email', placeholder: 'email@example.com' },
             { label: 'Password', key: 'password', type: 'password', placeholder: 'Set a password' },
             { label: 'Phone Number', key: 'phone', type: 'text', placeholder: '+91 XXXXX XXXXX' },
-          ].map((f) => (
+          ].map(f => (
             <div key={f.key}>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">{f.label}</label>
-              <input
-                type={f.type}
-                value={(form as any)[f.key]}
-                onChange={(e) => setForm((x) => ({ ...x, [f.key]: e.target.value }))}
-                placeholder={f.placeholder}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 text-sm"
-              />
+              <input type={f.type} value={(form as any)[f.key]} onChange={e => setForm(x => ({ ...x, [f.key]: e.target.value }))}
+                placeholder={f.placeholder} className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm" />
             </div>
           ))}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">Role</label>
-            <select
-              value={form.role}
-              onChange={(e) => setForm((x) => ({ ...x, role: e.target.value as ManagedUser['role'] }))}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm bg-white"
-            >
+            <select value={form.role} onChange={e => setForm(x => ({ ...x, role: e.target.value as ManagedUser['role'] }))}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm bg-white">
               <option value="customer">Customer (Buyer)</option>
               <option value="vendor">Vendor (Seller)</option>
               <option value="admin">Admin</option>
@@ -305,21 +243,15 @@ export default function UsersManagement() {
           <div className="bg-orange-50 border border-orange-100 rounded-xl px-4 py-3 text-xs text-orange-600">
             The user can login using the email and password you set above.
           </div>
-          <button onClick={handleAddUser} className="w-full py-3 fest-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">
-            Add User
-          </button>
+          <button onClick={handleAddUser} className="w-full py-3 fest-gradient text-white rounded-xl font-bold hover:opacity-90 transition-all">Add User</button>
         </div>
       </Modal>
 
-      {/* Confirm Modal */}
-      <ConfirmModal
-        isOpen={!!pendingAction}
-        title={pendingAction ? { approve: 'Approve User', block: 'Block User', unblock: 'Unblock User', delete: 'Delete User' }[pendingAction.type] : ''}
-        message={pendingAction ? confirmMessages[pendingAction.type] : ''}
-        confirmText={pendingAction ? confirmBtnTexts[pendingAction.type] : ''}
-        onConfirm={executeAction}
-        onCancel={() => setPendingAction(null)}
-      />
+      <ConfirmModal isOpen={!!pendingAction}
+        title={pendingAction ? actionLabels[pendingAction.type] : ''}
+        message={pendingAction ? actionMessages[pendingAction.type] : ''}
+        confirmText={pendingAction ? actionLabels[pendingAction.type] : ''}
+        onConfirm={executeAction} onCancel={() => setPendingAction(null)} />
     </div>
   );
 }

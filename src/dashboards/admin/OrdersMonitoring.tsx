@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiSearch, FiEye } from 'react-icons/fi';
-import { MdLocalShipping } from 'react-icons/md';
+import { Search, Eye, Truck } from 'lucide-react';
 import { ORDERS } from '@/constants/data';
 import { Order } from '@/types';
 import Modal from '@/components/features/Modal';
@@ -60,7 +59,7 @@ export default function OrdersMonitoring() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={15} />
           <input type="text" placeholder="Search by order ID or customer..." value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 text-sm" />
@@ -103,11 +102,11 @@ export default function OrdersMonitoring() {
                     <div className="flex gap-2">
                       <button onClick={() => setViewOrder(o)}
                         className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-500 rounded-lg text-xs font-semibold hover:bg-blue-100 transition-all">
-                        <FiEye className="text-sm" /> View
+                        <Eye size={13} /> View
                       </button>
                       <button onClick={() => { setUpdateOrder(o); setNewStatus(o.status); }}
                         className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-50 text-orange-500 rounded-lg text-xs font-semibold hover:bg-orange-100 transition-all">
-                        <MdLocalShipping className="text-sm" /> Update
+                        <Truck size={13} /> Update
                       </button>
                     </div>
                   </td>
