@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiCheck, FiArrowLeft, FiArrowRight, FiMapPin, FiCreditCard, FiShoppingBag } from 'react-icons/fi';
+import { FiCheck, FiArrowLeft, FiArrowRight, FiMapPin, FiCreditCard, FiShoppingBag, FiTag, FiX } from 'react-icons/fi';
 import { MdLocalShipping, MdPayment, MdCheckCircle, MdCreditCard, MdPhone, MdDeliveryDining } from 'react-icons/md';
 import { HiSparkles } from 'react-icons/hi';
 import { useAuth } from '@/hooks/useAuth';
-import { useProductStore } from '@/stores/productStore';
 import { toast } from 'sonner';
 
 const STEPS = [
@@ -21,9 +20,16 @@ const SAVED_ADDRESSES = [
 ];
 
 const CART_ITEMS = [
-  { id: 'c1', name: 'Diwali Puja Thali Set', price: 599, qty: 2, image: 'https://images.unsplash.com/photo-1605197584847-12af0e3c0f15?w=200&q=80' },
-  { id: 'c2', name: 'Ultimate Diwali Hamper', price: 2499, qty: 1, image: 'https://images.unsplash.com/photo-1605197584847-12af0e3c0f15?w=200&q=80' },
+  { id: 'c1', name: 'Diwali Puja Thali Set', price: 599, qty: 2, image: 'https://images.unsplash.com/photo-1574169208507-84376144848b?w=200&h=200&fit=crop&q=80' },
+  { id: 'c2', name: 'Ultimate Diwali Hamper', price: 2499, qty: 1, image: 'https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=200&h=200&fit=crop&q=80' },
 ];
+
+// ── Coupon Definitions ──
+const COUPONS: Record<string, { type: 'percent' | 'flat' | 'shipping'; value: number; label: string }> = {
+  FESTIVE20: { type: 'percent', value: 20, label: '20% off on order' },
+  DIWALI50: { type: 'flat', value: 50, label: '₹50 off on order' },
+  FREESHIP: { type: 'shipping', value: 0, label: 'Free shipping' },
+};
 
 // Confetti particles
 function Confetti() {
@@ -33,8 +39,8 @@ function Confetti() {
       {Array.from({ length: 60 }).map((_, i) => (
         <motion.div
           key={i}
-          initial={{ y: -20, x: Math.random() * window.innerWidth, opacity: 1, rotate: 0 }}
-          animate={{ y: window.innerHeight + 50, opacity: 0, rotate: Math.random() * 720 - 360, x: Math.random() * window.innerWidth }}
+          initial={{ y: -20, x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 800), opacity: 1, rotate: 0 }}
+          animate={{ y: (typeof window !== 'undefined' ? window.innerHeight : 800) + 50, opacity: 0, rotate: Math.random() * 720 - 360, x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 800) }}
           transition={{ duration: 2 + Math.random() * 2, delay: Math.random() * 1.5, ease: 'easeIn' }}
           className="absolute w-3 h-3 rounded-sm"
           style={{ backgroundColor: colors[Math.floor(Math.random() * colors.length)] }}
@@ -55,10 +61,55 @@ export default function Checkout() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [processing, setProcessing] = useState(false);
 
+  // ── Coupon State ──
+  const [couponInput, setCouponInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<null | { code: string; type: 'percent' | 'flat' | 'shipping'; value: number; label: string }>(null);
+  const [couponError, setCouponError] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
+
   const subtotal = CART_ITEMS.reduce((s, i) => s + i.price * i.qty, 0);
-  const shipping = subtotal >= 999 ? 0 : 79;
-  const discount = Math.floor(subtotal * 0.1);
-  const total = subtotal + shipping - discount;
+  const baseShipping = subtotal >= 999 ? 0 : 79;
+  const autoDiscount = Math.floor(subtotal * 0.1);
+
+  // Coupon discount
+  let couponDiscount = 0;
+  let shippingAfterCoupon = baseShipping;
+  if (appliedCoupon) {
+    if (appliedCoupon.type === 'percent') couponDiscount = Math.floor(subtotal * appliedCoupon.value / 100);
+    else if (appliedCoupon.type === 'flat') couponDiscount = appliedCoupon.value;
+    else if (appliedCoupon.type === 'shipping') shippingAfterCoupon = 0;
+  }
+
+  const totalSavings = autoDiscount + couponDiscount + (baseShipping - shippingAfterCoupon);
+  const total = subtotal + shippingAfterCoupon - autoDiscount - couponDiscount;
+
+  const handleApplyCoupon = () => {
+    const code = couponInput.trim().toUpperCase();
+    if (!code) { setCouponError('Please enter a coupon code.'); return; }
+    setCouponLoading(true);
+    setCouponError('');
+    setTimeout(() => {
+      setCouponLoading(false);
+      const coupon = COUPONS[code];
+      if (!coupon) {
+        setCouponError('Invalid coupon code. Try FESTIVE20, DIWALI50, or FREESHIP.');
+        return;
+      }
+      if (appliedCoupon?.code === code) {
+        setCouponError('This coupon is already applied.');
+        return;
+      }
+      setAppliedCoupon({ code, ...coupon });
+      setCouponInput('');
+      toast.success(`Coupon "${code}" applied! ${coupon.label}.`);
+    }, 600);
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponError('');
+    toast.info('Coupon removed.');
+  };
 
   const handlePlaceOrder = () => {
     setProcessing(true);
@@ -210,9 +261,11 @@ export default function Checkout() {
                       </div>
                     )}
                     <div className="flex gap-3">
-                      <button onClick={() => setStep(2)} className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center gap-2"><FiArrowLeft /> Back</button>
+                      <button onClick={() => setStep(2)} className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center gap-2">
+                        <FiArrowLeft /> Back
+                      </button>
                       <button onClick={handlePlaceOrder} disabled={processing}
-                        className="flex-2 px-8 py-3 fest-gradient text-white rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                        className="flex-[2] px-8 py-3 fest-gradient text-white rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-70">
                         {processing ? (
                           <><motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.8, ease: 'linear' }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" /> Processing...</>
                         ) : (
@@ -234,6 +287,11 @@ export default function Checkout() {
                     </motion.div>
                     <h2 className="text-2xl font-black text-gray-900 mb-2">Order Placed!</h2>
                     <p className="text-gray-500 mb-4">Your festive order is confirmed</p>
+                    {appliedCoupon && (
+                      <div className="bg-green-50 border border-green-200 rounded-2xl px-4 py-2 mb-4 inline-flex items-center gap-2 text-green-700 text-sm font-medium">
+                        <FiTag /> Coupon {appliedCoupon.code} saved you ₹{(appliedCoupon.type === 'percent' ? Math.floor(subtotal * appliedCoupon.value / 100) : appliedCoupon.type === 'flat' ? appliedCoupon.value : baseShipping).toLocaleString()}!
+                      </div>
+                    )}
                     <div className="bg-orange-50 rounded-2xl px-6 py-4 mb-6 inline-block">
                       <p className="text-xs text-orange-600 font-medium">Order ID</p>
                       <p className="text-xl font-black text-orange-500">#{orderId}</p>
@@ -242,12 +300,10 @@ export default function Checkout() {
                       Estimated delivery: <strong className="text-gray-800">3–5 business days</strong>
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                      <Link to={`/track/${orderId}`}
-                        className="px-6 py-3 fest-gradient text-white rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2">
+                      <Link to={`/track/${orderId}`} className="px-6 py-3 fest-gradient text-white rounded-2xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2">
                         <MdLocalShipping /> Track Order
                       </Link>
-                      <Link to="/shop"
-                        className="px-6 py-3 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center gap-2">
+                      <Link to="/shop" className="px-6 py-3 bg-gray-100 text-gray-700 rounded-2xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center gap-2">
                         <FiShoppingBag /> Continue Shopping
                       </Link>
                     </div>
@@ -270,18 +326,80 @@ export default function Checkout() {
                     </div>
                   ))}
                 </div>
+
+                {/* ── Coupon Input ── */}
+                <div className="mb-4 border-t border-gray-100 pt-4">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1.5">
+                    <FiTag className="text-orange-400" /> Coupon Code
+                  </label>
+                  {appliedCoupon ? (
+                    <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-xl px-3 py-2.5">
+                      <div className="flex items-center gap-2">
+                        <FiCheck className="text-green-600 text-sm flex-shrink-0" />
+                        <div>
+                          <p className="text-sm font-bold text-green-700">{appliedCoupon.code}</p>
+                          <p className="text-xs text-green-600">{appliedCoupon.label}</p>
+                        </div>
+                      </div>
+                      <button onClick={handleRemoveCoupon} className="text-green-500 hover:text-red-500 transition-colors">
+                        <FiX className="text-base" />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex gap-2">
+                        <input
+                          value={couponInput}
+                          onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError(''); }}
+                          onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
+                          placeholder="e.g. FESTIVE20"
+                          className={`flex-1 px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:border-orange-400 uppercase ${couponError ? 'border-red-300 bg-red-50' : 'border-gray-200'}`}
+                        />
+                        <button onClick={handleApplyCoupon} disabled={couponLoading}
+                          className="px-4 py-2.5 fest-gradient text-white rounded-xl text-sm font-bold hover:opacity-90 transition-all disabled:opacity-60 whitespace-nowrap">
+                          {couponLoading ? '...' : 'Apply'}
+                        </button>
+                      </div>
+                      {couponError && <p className="text-xs text-red-500 mt-1.5 font-medium">{couponError}</p>}
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {Object.keys(COUPONS).map(c => (
+                          <button key={c} onClick={() => { setCouponInput(c); setCouponError(''); }}
+                            className="text-[10px] text-orange-500 bg-orange-50 border border-orange-200 px-2 py-0.5 rounded-full font-semibold hover:bg-orange-100 transition-all">
+                            {c}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Price breakdown */}
                 <div className="border-t border-gray-100 pt-4 flex flex-col gap-2">
                   <div className="flex justify-between text-sm"><span className="text-gray-500">Subtotal</span><span className="font-medium">₹{subtotal.toLocaleString()}</span></div>
-                  <div className="flex justify-between text-sm"><span className="text-gray-500">Shipping</span><span className={shipping === 0 ? 'text-green-600 font-medium' : 'font-medium'}>{shipping === 0 ? 'FREE' : `₹${shipping}`}</span></div>
-                  <div className="flex justify-between text-sm"><span className="text-gray-500">Discount (10%)</span><span className="text-green-600 font-medium">–₹{discount.toLocaleString()}</span></div>
+                  <div className="flex justify-between text-sm"><span className="text-gray-500">Shipping</span>
+                    <span className={shippingAfterCoupon === 0 ? 'text-green-600 font-medium' : 'font-medium'}>
+                      {shippingAfterCoupon === 0 ? <span className="flex items-center gap-1">FREE {appliedCoupon?.type === 'shipping' && <span className="text-[10px] bg-green-100 text-green-600 px-1 rounded">COUPON</span>}</span> : `₹${shippingAfterCoupon}`}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm"><span className="text-gray-500">Auto Discount (10%)</span><span className="text-green-600 font-medium">–₹{autoDiscount.toLocaleString()}</span></div>
+                  {appliedCoupon && appliedCoupon.type !== 'shipping' && (
+                    <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="flex justify-between text-sm">
+                      <span className="text-green-600 flex items-center gap-1"><FiTag className="text-xs" /> Coupon ({appliedCoupon.code})</span>
+                      <span className="text-green-600 font-bold">–₹{couponDiscount.toLocaleString()}</span>
+                    </motion.div>
+                  )}
                   <div className="flex justify-between text-lg font-black border-t border-gray-100 pt-3 mt-1">
                     <span className="text-gray-900">Total</span>
-                    <span className="text-orange-500">₹{total.toLocaleString()}</span>
+                    <motion.span key={total} initial={{ scale: 1.1, color: '#f97316' }} animate={{ scale: 1, color: '#f97316' }} className="text-orange-500">
+                      ₹{total.toLocaleString()}
+                    </motion.span>
                   </div>
                 </div>
-                <div className="mt-4 bg-green-50 rounded-xl px-4 py-3 text-xs text-green-700 text-center font-medium">
-                  You save ₹{discount.toLocaleString()} on this order!
-                </div>
+                {totalSavings > 0 && (
+                  <motion.div key={totalSavings} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 bg-green-50 rounded-xl px-4 py-3 text-xs text-green-700 text-center font-medium">
+                    You save ₹{totalSavings.toLocaleString()} on this order!
+                  </motion.div>
+                )}
               </div>
             </div>
           )}
