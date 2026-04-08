@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiStar, FiTruck, FiShield, FiRefreshCw, FiHeadphones } from 'react-icons/fi';
-import { HiSparkles, HiLightningBolt } from 'react-icons/hi';
-import { MdLocalOffer } from 'react-icons/md';
-import { BsGiftFill } from 'react-icons/bs';
+import {
+  ArrowRight, Star, Truck, Shield, RefreshCw, Headphones,
+  Sparkles, Zap, Tag, Gift
+} from 'lucide-react';
 import { FESTIVALS } from '@/constants/data';
 import ProductCard from '@/components/features/ProductCard';
 import { useProductStore } from '@/stores/productStore';
@@ -18,10 +18,34 @@ const TESTIMONIALS = [
 ];
 
 const FESTIVAL_BANNERS = [
-  { name: 'Diwali', subtitle: 'Festival of Lights', color: 'from-orange-500 to-yellow-400', count: '200+ Products', img: 'https://images.unsplash.com/photo-1574169208507-84376144848b?w=400&h=300&fit=crop&q=80' },
-  { name: 'Holi', subtitle: 'Festival of Colors', color: 'from-pink-500 to-purple-500', count: '150+ Products', img: 'https://images.unsplash.com/photo-1615811648503-479d0a9d2c10?w=400&h=300&fit=crop&q=80' },
-  { name: 'Weddings', subtitle: 'Celebrate Love', color: 'from-red-500 to-pink-500', count: '180+ Products', img: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=300&fit=crop&q=80' },
-  { name: 'Ganesh', subtitle: 'Chaturthi Special', color: 'from-yellow-500 to-orange-500', count: '100+ Products', img: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400&h=300&fit=crop&q=80' },
+  {
+    name: 'Diwali',
+    subtitle: 'Festival of Lights',
+    color: 'from-orange-500 to-yellow-400',
+    count: '200+ Products',
+    img: 'https://images.unsplash.com/photo-1604413191066-4dd20bedf486?w=600&h=400&fit=crop&q=85',
+  },
+  {
+    name: 'Holi',
+    subtitle: 'Festival of Colors',
+    color: 'from-pink-500 to-purple-500',
+    count: '150+ Products',
+    img: 'https://images.unsplash.com/photo-1576037728058-fe7c5fff1c0e?w=600&h=400&fit=crop&q=85',
+  },
+  {
+    name: 'Weddings',
+    subtitle: 'Celebrate Love',
+    color: 'from-red-500 to-pink-500',
+    count: '180+ Products',
+    img: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&h=400&fit=crop&q=85',
+  },
+  {
+    name: 'Ganesh',
+    subtitle: 'Chaturthi Special',
+    color: 'from-yellow-500 to-orange-500',
+    count: '100+ Products',
+    img: 'https://images.unsplash.com/photo-1567591370372-b0e6ff654a6f?w=600&h=400&fit=crop&q=85',
+  },
 ];
 
 const STATS = [
@@ -40,26 +64,29 @@ export default function Home() {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('All');
 
-  // Featured products from global store (live)
   const featuredProducts = activeFilter === 'All'
     ? products.filter(p => !p.isCombo).slice(0, 8)
     : products.filter(p => !p.isCombo && p.festival === activeFilter).slice(0, 8);
 
-  // Combo products from global store (live)
   const comboProducts = products.filter(p => p.isCombo).slice(0, 3);
 
   return (
     <div className="overflow-x-hidden">
-      {/* Hero Section */}
+      {/* ── Hero Section ── */}
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroBanner} alt="Festive celebration" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-transparent" />
+          <img
+            src={heroBanner}
+            alt="Festive celebration"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
         </div>
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }} className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-400/40 rounded-full text-orange-300 text-sm font-medium mb-6 backdrop-blur-sm">
-              <HiSparkles /> Celebrate Every Festival in Style
+              <Sparkles size={14} /> Celebrate Every Festival in Style
             </div>
             <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
               Shop the<br />
@@ -70,10 +97,10 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/shop" className="inline-flex items-center gap-2 px-8 py-4 fest-gradient text-white rounded-2xl font-bold text-lg shadow-lg hover:opacity-90 transition-all glow-orange">
-                <BsGiftFill /> Shop Now <FiArrowRight />
+                <Gift size={18} /> Shop Now <ArrowRight size={18} />
               </Link>
               <Link to="/combos" className="inline-flex items-center gap-2 px-8 py-4 bg-white/15 border border-white/30 text-white rounded-2xl font-bold text-lg backdrop-blur-sm hover:bg-white/25 transition-all">
-                <HiSparkles /> View Combos
+                <Sparkles size={18} /> View Combos
               </Link>
             </div>
             <div className="flex flex-wrap gap-8 mt-10">
@@ -86,6 +113,7 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
+
         {/* Floating particles */}
         {[...Array(8)].map((_, i) => (
           <motion.div key={i} className="absolute w-2 h-2 bg-orange-400/60 rounded-full"
@@ -96,7 +124,7 @@ export default function Home() {
         ))}
       </section>
 
-      {/* Festival Banners */}
+      {/* ── Festival Banners ── */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...fadeInUp} className="text-center mb-10">
           <h2 className="text-4xl font-black text-gray-900 mb-3">Shop by Festival</h2>
@@ -104,10 +132,15 @@ export default function Home() {
         </motion.div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {FESTIVAL_BANNERS.map((f, i) => (
-            <motion.div key={f.name} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }} whileHover={{ scale: 1.03 }}>
-              <Link to={`/shop?festival=${encodeURIComponent(f.name)}`} className="relative block rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow group aspect-[4/3]">
-                <img src={f.img} alt={f.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent`} />
+            <motion.div key={f.name}
+              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }} whileHover={{ scale: 1.03 }}>
+              <Link to={`/shop?festival=${encodeURIComponent(f.name)}`}
+                className="relative block rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow group"
+                style={{ aspectRatio: '4/3' }}>
+                <img src={f.img} alt={f.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                   <h3 className="font-black text-xl mb-0.5">{f.name}</h3>
                   <p className="text-white/80 text-sm mb-2">{f.subtitle}</p>
@@ -130,22 +163,19 @@ export default function Home() {
             </p>
           </div>
           <Link to="/shop" className="hidden md:flex items-center gap-2 px-6 py-3 border-2 border-orange-400 text-orange-500 rounded-xl font-semibold hover:bg-orange-50 transition-all">
-            View All <FiArrowRight />
+            View All <ArrowRight size={16} />
           </Link>
         </motion.div>
 
-        {/* ── Festival Category Quick-Filter Row ── */}
+        {/* Festival Category Quick-Filter Row */}
         <motion.div {...fadeInUp} className="flex gap-2 overflow-x-auto scrollbar-hide pb-3 mb-8">
           {CATEGORY_FILTERS.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveFilter(cat)}
+            <button key={cat} onClick={() => setActiveFilter(cat)}
               className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0 ${
                 activeFilter === cat
                   ? 'fest-gradient text-white shadow-md'
                   : 'bg-white border-2 border-orange-200 text-orange-500 hover:bg-orange-50'
-              }`}
-            >
+              }`}>
               {cat}
             </button>
           ))}
@@ -178,11 +208,12 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-400/30 rounded-full text-orange-300 text-sm font-medium mb-4">
-              <HiLightningBolt /> Our USP — Exclusive Combo Bundles
+              <Zap size={14} /> Our USP — Exclusive Combo Bundles
             </div>
             <h2 className="text-4xl font-black text-white mb-3">Combo Offers</h2>
             <p className="text-gray-400 text-lg">Save more with our curated festive bundles</p>
           </motion.div>
+
           {comboProducts.length === 0 ? (
             <div className="text-center py-16 bg-white/10 rounded-3xl border border-white/20">
               <div className="text-5xl mb-3">📦</div>
@@ -191,13 +222,16 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {comboProducts.map((product, i) => (
-                <motion.div key={product.id} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }} whileHover={{ y: -6 }}
+                <motion.div key={product.id}
+                  initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }}
+                  whileHover={{ y: -6 }}
                   className="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl overflow-hidden hover:border-orange-400/40 transition-all">
                   <div className="relative overflow-hidden" style={{ height: 200 }}>
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                     <div className="absolute top-3 left-3 fest-gradient text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
-                      <HiSparkles /> COMBO DEAL
+                      <Sparkles size={11} /> COMBO DEAL
                     </div>
                     <div className="absolute bottom-3 left-3 right-3">
                       <div className="text-white font-bold text-lg leading-tight">{product.name}</div>
@@ -217,18 +251,19 @@ export default function Home() {
               ))}
             </div>
           )}
+
           <div className="text-center mt-8 flex justify-center gap-4 flex-wrap">
             <Link to="/combos" className="inline-flex items-center gap-2 px-8 py-4 fest-gradient text-white rounded-2xl font-bold hover:opacity-90 transition-all">
-              View All Combo Offers <FiArrowRight />
+              View All Combo Offers <ArrowRight size={18} />
             </Link>
             <Link to="/combos/builder" className="inline-flex items-center gap-2 px-8 py-4 bg-white/15 border border-white/30 text-white rounded-2xl font-bold hover:bg-white/25 transition-all">
-              <BsGiftFill /> Build Custom Bundle
+              <Gift size={18} /> Build Custom Bundle
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* ── Why Choose Us ── */}
       <section className="py-16 bg-gradient-to-br from-orange-50 to-pink-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-12">
@@ -237,15 +272,17 @@ export default function Home() {
           </motion.div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { icon: FiTruck, title: 'Free Delivery', desc: 'Free shipping on orders above ₹999', color: 'bg-orange-100 text-orange-500' },
-              { icon: FiShield, title: '100% Authentic', desc: 'All products are quality verified', color: 'bg-green-100 text-green-500' },
-              { icon: FiRefreshCw, title: 'Easy Returns', desc: '7-day hassle-free return policy', color: 'bg-blue-100 text-blue-500' },
-              { icon: FiHeadphones, title: '24/7 Support', desc: 'Round the clock customer support', color: 'bg-purple-100 text-purple-500' },
+              { icon: Truck, title: 'Free Delivery', desc: 'Free shipping on orders above ₹999', color: 'bg-orange-100 text-orange-500' },
+              { icon: Shield, title: '100% Authentic', desc: 'All products are quality verified', color: 'bg-green-100 text-green-500' },
+              { icon: RefreshCw, title: 'Easy Returns', desc: '7-day hassle-free return policy', color: 'bg-blue-100 text-blue-500' },
+              { icon: Headphones, title: '24/7 Support', desc: 'Round the clock customer support', color: 'bg-purple-100 text-purple-500' },
             ].map((item, i) => (
-              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+              <motion.div key={item.title}
+                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
                 <div className={`w-14 h-14 ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
-                  <item.icon className="text-2xl" />
+                  <item.icon size={24} />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-1">{item.title}</h3>
                 <p className="text-gray-500 text-sm">{item.desc}</p>
@@ -255,7 +292,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* ── Testimonials ── */}
       <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div {...fadeInUp} className="text-center mb-12">
           <h2 className="text-4xl font-black text-gray-900 mb-3">What Our Customers Say</h2>
@@ -263,11 +300,13 @@ export default function Home() {
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {TESTIMONIALS.map((t, i) => (
-            <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
+            <motion.div key={t.name}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: i * 0.1 }}
               className="bg-white rounded-2xl p-6 shadow-sm border border-orange-50 hover:shadow-md transition-shadow">
               <div className="flex items-center gap-1 mb-3">
                 {[...Array(t.rating)].map((_, j) => (
-                  <FiStar key={j} className="text-yellow-400 fill-yellow-400 text-sm" />
+                  <Star key={j} size={13} className="text-yellow-400 fill-yellow-400" />
                 ))}
               </div>
               <p className="text-gray-600 text-sm leading-relaxed mb-4 italic">"{t.text}"</p>
@@ -283,7 +322,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* All Festivals Scroll */}
+      {/* ── All Festivals Scroll ── */}
       <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-8">
@@ -291,8 +330,11 @@ export default function Home() {
           </motion.div>
           <div className="flex flex-wrap gap-3 justify-center">
             {FESTIVALS.map((f, i) => (
-              <motion.div key={f} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} whileHover={{ scale: 1.05 }}>
-                <button onClick={() => { setActiveFilter(f); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate(`/shop?festival=${encodeURIComponent(f)}`); }}
+              <motion.div key={f}
+                initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.05 }} whileHover={{ scale: 1.05 }}>
+                <button
+                  onClick={() => { setActiveFilter(f); window.scrollTo({ top: 0, behavior: 'smooth' }); navigate(`/shop?festival=${encodeURIComponent(f)}`); }}
                   className="px-5 py-2.5 bg-white border-2 border-orange-200 text-orange-500 rounded-full font-medium hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all shadow-sm">
                   {f}
                 </button>
@@ -302,11 +344,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* ── CTA Section ── */}
       <section className="py-20 fest-gradient relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           {[...Array(5)].map((_, i) => (
-            <motion.div key={i} className="absolute w-64 h-64 rounded-full border border-white" style={{ right: `${i * 15}%`, bottom: `-50%` }}
+            <motion.div key={i} className="absolute w-64 h-64 rounded-full border border-white"
+              style={{ right: `${i * 15}%`, bottom: `-50%` }}
               animate={{ rotate: 360 }} transition={{ duration: 20 + i * 5, repeat: Infinity, ease: 'linear' }} />
           ))}
         </div>
@@ -318,21 +361,23 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/register" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-orange-500 rounded-2xl font-bold text-lg hover:bg-orange-50 transition-all shadow-lg">
-                Create Free Account <FiArrowRight />
+                Create Free Account <ArrowRight size={20} />
               </Link>
               <Link to="/shop" className="inline-flex items-center gap-2 px-8 py-4 bg-white/20 border border-white/40 text-white rounded-2xl font-bold text-lg hover:bg-white/30 transition-all">
-                <MdLocalOffer /> Browse Offers
+                <Tag size={20} /> Browse Offers
               </Link>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* App download promo */}
+      {/* ── App download promo ── */}
       <section className="py-12 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <h3 className="text-2xl font-bold mb-2">Download FestiveRetail App <HiSparkles className="inline text-orange-400" /></h3>
+            <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+              Download FestiveRetail App <Sparkles className="text-orange-400" size={20} />
+            </h3>
             <p className="text-gray-400">Get exclusive app-only deals and track your orders in real-time</p>
           </div>
           <div className="flex gap-3">
